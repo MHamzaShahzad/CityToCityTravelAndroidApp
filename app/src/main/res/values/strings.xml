@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CityToCityTravelAndroidApp</string>
+    <string name="welcome_to_our_app">Welcome to our app</string>
+    <string name="loading">Loading...</string>
 </resources>
