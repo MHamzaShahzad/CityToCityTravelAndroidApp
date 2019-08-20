@@ -7,6 +7,9 @@ public class Post {
             minimumNoOfSeatsAvailable, postTime, postStatus, costPerHead, providerFirebaseUId;
 
 
+    public Post() {
+    }
+
     public Post(String vehicleModel, String vehicleNumber, String vehicleImage, String departureTime, String estimatedArrivalTime, String departureLocation, String arrivalLocation, String departureCity, String arrivalCity, String totalNoOfSeatsAvailable, String maximumNoOfSeatsAvailable, String minimumNoOfSeatsAvailable, String postTime, String postStatus, String costPerHead, String providerFirebaseUId) {
         this.vehicleModel = vehicleModel;
         this.vehicleNumber = vehicleNumber;

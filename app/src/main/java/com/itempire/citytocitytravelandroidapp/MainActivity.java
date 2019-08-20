@@ -2,6 +2,7 @@ package com.itempire.citytocitytravelandroidapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,14 +21,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyPrefLocalStorage;
+import com.itempire.citytocitytravelandroidapp.models.Post;
 import com.itempire.citytocitytravelandroidapp.models.User;
 import com.itempire.citytocitytravelandroidapp.models.UserDeviceToken;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
+
         if (GetCurrentFirebaseUser() != null) {
             startMainDrawer();
         }

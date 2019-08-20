@@ -8,19 +8,31 @@ import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.itempire.citytocitytravelandroidapp.adapters.AdapterAllPosts;
+import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
+import com.itempire.citytocitytravelandroidapp.models.Post;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass.SignOut;
 
@@ -30,13 +42,17 @@ public class MainDrawerActivity extends AppCompatActivity
     private Context context;
     private static DrawerLayout drawer;
 
+    RecyclerView recycler_all_posts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_drawer);
         context = this;
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +71,33 @@ public class MainDrawerActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        recycler_all_posts = (RecyclerView) findViewById(R.id.recycler_all_posts);
+        recycler_all_posts.setHasFixedSize(true);
+        recycler_all_posts.setLayoutManager(new LinearLayoutManager(context));
+
+        new MyFirebaseDatabaseClass().getUsersPostsDBReference().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                List<Post> list = new ArrayList<>();
+
+                Iterable<DataSnapshot> childrenList = dataSnapshot.getChildren();
+                for (DataSnapshot child : childrenList) {
+
+                    list.add(child.getValue(Post.class));
+
+                }
+                recycler_all_posts.setAdapter(new AdapterAllPosts(context, list));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override
