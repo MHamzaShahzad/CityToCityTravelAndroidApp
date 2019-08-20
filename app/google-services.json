@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "328420376292",
+    "firebase_url": "https://citytocitytravelandroidapp.firebaseio.com",
+    "project_id": "citytocitytravelandroidapp",
+    "storage_bucket": "citytocitytravelandroidapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328420376292:android:e298f1fa158bcee0",
+        "android_client_info": {
+          "package_name": "com.itempire.citytocitytravelandroidapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "328420376292-cbhgrn6il151ejav4aj14eee35fl131d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.itempire.citytocitytravelandroidapp",
+            "certificate_hash": "add77befe713b270d313801d124d15891275d8d2"
+          }
+        },
+        {
+          "client_id": "328420376292-2c2pfqmb3c8up0v9gbnkm8hvb9m9vk6u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGomIGYawWMiJ-WzSil35AXgBECV2LJZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "328420376292-2c2pfqmb3c8up0v9gbnkm8hvb9m9vk6u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

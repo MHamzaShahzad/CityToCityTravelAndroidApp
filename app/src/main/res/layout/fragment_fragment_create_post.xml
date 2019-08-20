@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragmentCreatePost">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/create_posts_image"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:src="@drawable/placeholder_photos" />
+
+            <EditText
+                android:id="@+id/create_posts_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your name..."
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/create_posts_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phone number"
+                android:inputType="phone" />
+
+            <EditText
+                android:id="@+id/create_posts_vehicle_model"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Vehicle Model"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/create_posts_vehicle_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Vehicle Number"
+                android:inputType="number" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/create_posts_dept_date_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:hint="Departure Time"
+                    />
+
+                <ImageView
+                    android:id="@+id/image_view_dept_time_calander"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_calander_black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/create_posts_arrival_date_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:hint="Estimated Arrival Time" />
+
+                <ImageView
+                    android:id="@+id/image_view_arrival_time_calander"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_calander_black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/create_posts_dept_location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:hint="Departure Location"
+                    android:editable="false"
+                    android:inputType="text" />
+
+                <ImageView
+                    android:id="@+id/image_view_dept_location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_location_black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/create_posts_arrival_location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:hint="Arrival Location"
+                    android:editable="false"
+                    android:inputType="text" />
+
+                <ImageView
+                    android:id="@+id/image_view_arrival_location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_location_black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/create_posts_dept_city"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:hint="Departure City"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/create_posts_arrival_city"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:hint="Arrival City"
+                    android:inputType="text" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/create_posts_total_no_of_seats_available"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Total number of seats available"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/create_posts_max_no_of_seats_available"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Maximum number of seats available"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/create_posts_min_no_of_seats_available"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Minimum number of seats available"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/create_posts_cost_per_seat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enetr cost per seat"
+                android:inputType="number" />
+
+            <Button
+                android:id="@+id/btn_submit_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Submit" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

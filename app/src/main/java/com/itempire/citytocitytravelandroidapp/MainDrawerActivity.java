@@ -1,5 +1,6 @@
 package com.itempire.citytocitytravelandroidapp;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,13 +22,19 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import static com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass.SignOut;
+
 public class MainDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Context context;
+    private static DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_drawer);
+        context = this;
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -38,7 +45,10 @@ public class MainDrawerActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+
+
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -49,7 +59,7 @@ public class MainDrawerActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -89,18 +99,25 @@ public class MainDrawerActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_create_post) {
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentCreatePost(context)).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_tools) {
 
+        } else if (id == R.id.nav_logout) {
+            SignOut(context);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
+
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }

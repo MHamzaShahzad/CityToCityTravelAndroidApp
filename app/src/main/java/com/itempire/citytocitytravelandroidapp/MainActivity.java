@@ -1,5 +1,6 @@
 package com.itempire.citytocitytravelandroidapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -10,20 +11,29 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.itempire.citytocitytravelandroidapp.controllers.MyPrefLocalStorage;
+import com.itempire.citytocitytravelandroidapp.models.User;
+import com.itempire.citytocitytravelandroidapp.models.UserDeviceToken;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass.GetCurrentFirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getName();
     private Context context;
@@ -35,14 +45,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            initProviders();
-            showSignInOptions();
-        } else {
+        context = this;
+        if (GetCurrentFirebaseUser() != null) {
             startMainDrawer();
         }
 
+        findViewById(R.id.btn_login_phone).setOnClickListener(this);
 
     }
 
@@ -107,7 +115,21 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "onActivityResult: VALID_RESULT_CODE");
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
-                    startMainDrawer();
+
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference myRef = database.getReference("Users");
+                    DatabaseReference myRefToken = database.getReference("UsersTokens");
+
+                    myRefToken.child(user.getUid()).setValue(new UserDeviceToken(user.getUid(), new MyPrefLocalStorage(context).getDeviceToken(), null, null));
+
+                    myRef.child(user.getUid()).child("userPhoneNumber").setValue(user.getPhoneNumber()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful())
+                                startMainDrawer();
+                        }
+                    });
+
                 }
                 // ...
             } else {
@@ -117,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 // ...
                 if (response != null && response.getError() != null)
                     Log.e(TAG, "onActivityResult: Error" + response.getError().getErrorCode());
-                showSignInOptions();
+                //showSignInOptions();
             }
         }
     }
@@ -127,4 +149,11 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_login_phone) {
+            initProviders();
+            showSignInOptions();
+        }
+    }
 }
