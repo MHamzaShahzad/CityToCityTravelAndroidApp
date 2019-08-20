@@ -109,7 +109,7 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
 
     private void uploadPostToFBDatabase(Date date, String imageUrl) {
 
-        new MyFirebaseDatabaseClass().getUsersPostsDBReference().child(GetCurrentFirebaseUser().getUid()+date.toLocaleString()).setValue(
+        new MyFirebaseDatabaseClass().getUsersPostsDBReference().child(GetCurrentFirebaseUser().getUid() + date.toLocaleString()).setValue(
                 new Post(create_posts_vehicle_model.getText().toString(),
                         create_posts_vehicle_number.getText().toString(),
                         imageUrl,
@@ -125,7 +125,9 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
                         date.toLocaleString(),
                         Constant.POST_ACTIVE_STATUS,
                         create_posts_cost_per_seat.getText().toString(),
-                        GetCurrentFirebaseUser().getUid())
+                        GetCurrentFirebaseUser().getUid(),
+                        GetCurrentFirebaseUser().getUid() + date.toLocaleString()
+                )
 
         ).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -135,17 +137,17 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context,"Can't upload post data, something went wrong , please try again!",Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Can't upload post data, something went wrong , please try again!", Toast.LENGTH_LONG).show();
             }
         });
 
 
     }
 
-    private void uploadPostImageToFBStorage(){
+    private void uploadPostImageToFBStorage() {
         final Date date = new Date();
 
-        new MyFirebaseStorageClass().getPostsImagesReference().child(GetCurrentFirebaseUser().getUid()+date.toLocaleString()).putFile(selectedImage)
+        new MyFirebaseStorageClass().getPostsImagesReference().child(GetCurrentFirebaseUser().getUid() + date.toLocaleString()).putFile(selectedImage)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -163,14 +165,15 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 e.printStackTrace();
-                                Toast.makeText(context,"Can't upload image, something went wrong , please try again!",Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "Can't upload image, something went wrong , please try again!", Toast.LENGTH_LONG).show();
                             }
                         });
 
                         /*if (downloadUrl.isSuccessful())
                         else
                             Toast.makeText(context,"Something went wrong , please try again!",Toast.LENGTH_LONG).show();
-                    */}
+                    */
+                    }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -304,7 +307,7 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
             result = false;
         }
 
-        if (imageBitmap == null){
+        if (imageBitmap == null) {
             Toast.makeText(context, "Select an image", Toast.LENGTH_LONG).show();
             result = false;
         }

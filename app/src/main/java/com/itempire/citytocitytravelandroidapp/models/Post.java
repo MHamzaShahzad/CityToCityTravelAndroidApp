@@ -1,16 +1,18 @@
 package com.itempire.citytocitytravelandroidapp.models;
 
-public class Post {
+import java.io.Serializable;
+
+public class Post implements Serializable {
 
     String vehicleModel, vehicleNumber, vehicleImage, departureTime, estimatedArrivalTime, departureLocation,
     arrivalLocation, departureCity, arrivalCity, totalNoOfSeatsAvailable, maximumNoOfSeatsAvailable,
-            minimumNoOfSeatsAvailable, postTime, postStatus, costPerHead, providerFirebaseUId;
+            minimumNoOfSeatsAvailable, postTime, postStatus, costPerHead, providerFirebaseUId, postId;
 
 
     public Post() {
     }
 
-    public Post(String vehicleModel, String vehicleNumber, String vehicleImage, String departureTime, String estimatedArrivalTime, String departureLocation, String arrivalLocation, String departureCity, String arrivalCity, String totalNoOfSeatsAvailable, String maximumNoOfSeatsAvailable, String minimumNoOfSeatsAvailable, String postTime, String postStatus, String costPerHead, String providerFirebaseUId) {
+    public Post(String vehicleModel, String vehicleNumber, String vehicleImage, String departureTime, String estimatedArrivalTime, String departureLocation, String arrivalLocation, String departureCity, String arrivalCity, String totalNoOfSeatsAvailable, String maximumNoOfSeatsAvailable, String minimumNoOfSeatsAvailable, String postTime, String postStatus, String costPerHead, String providerFirebaseUId, String postId) {
         this.vehicleModel = vehicleModel;
         this.vehicleNumber = vehicleNumber;
         this.vehicleImage = vehicleImage;
@@ -27,6 +29,7 @@ public class Post {
         this.postStatus = postStatus;
         this.costPerHead = costPerHead;
         this.providerFirebaseUId = providerFirebaseUId;
+        this.postId = postId;
     }
 
     public String getVehicleModel() {
@@ -91,5 +94,9 @@ public class Post {
 
     public String getProviderFirebaseUId() {
         return providerFirebaseUId;
+    }
+
+    public String getPostId() {
+        return postId;
     }
 }

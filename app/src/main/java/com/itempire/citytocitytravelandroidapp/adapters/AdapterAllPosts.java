@@ -2,6 +2,7 @@ package com.itempire.citytocitytravelandroidapp.adapters;
 
 import android.content.Context;
 import android.media.Image;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.FragmentPostDescription;
 import com.itempire.citytocitytravelandroidapp.R;
 import com.itempire.citytocitytravelandroidapp.models.Post;
 import com.squareup.picasso.Picasso;
@@ -21,6 +26,7 @@ public class AdapterAllPosts extends RecyclerView.Adapter<AdapterAllPosts.Holder
 
     Context context;
     List<Post> list;
+    private static Bundle bundle;
 
     public AdapterAllPosts(Context context, List<Post> list) {
         this.context = context;
@@ -36,15 +42,15 @@ public class AdapterAllPosts extends RecyclerView.Adapter<AdapterAllPosts.Holder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterAllPosts.Holder holder, int position) {
+    public void onBindViewHolder(@NonNull final AdapterAllPosts.Holder holder, int position) {
 
-        Post post = list.get(position);
+        final Post post = list.get(position);
         try {
 
             if (post.getVehicleImage() != null)
                 Picasso.get().load(post.getVehicleImage()).into(holder.image_post_recycler);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         holder.post_data.setText(
@@ -56,6 +62,17 @@ public class AdapterAllPosts extends RecyclerView.Adapter<AdapterAllPosts.Holder
                         post.getEstimatedArrivalTime()
         );
 
+        holder.card_post_recycler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentPostDescription postDescription = new FragmentPostDescription(context);
+                bundle = new Bundle();
+                bundle.putSerializable(Constant.POST_OBJECT_DESCRIPTION, list.get(holder.getAdapterPosition()));
+                postDescription.setArguments(bundle);
+                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, postDescription).addToBackStack(null).commit();
+            }
+        });
+
     }
 
     @Override
@@ -65,11 +82,14 @@ public class AdapterAllPosts extends RecyclerView.Adapter<AdapterAllPosts.Holder
 
     public class Holder extends RecyclerView.ViewHolder {
 
+        CardView card_post_recycler;
         ImageView image_post_recycler;
         TextView post_data;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
+
+            card_post_recycler = itemView.findViewById(R.id.card_post_recycler);
             image_post_recycler = itemView.findViewById(R.id.image_post_recycler);
             post_data = itemView.findViewById(R.id.post_data);
         }

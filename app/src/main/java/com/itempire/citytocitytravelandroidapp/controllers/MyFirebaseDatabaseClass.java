@@ -10,6 +10,7 @@ public class MyFirebaseDatabaseClass {
     public static final String USERS_PROFILE_REFERENCE = "Users";
     public static final String USERS_TOKEN_REFERENCE = "UsersTokens";
     public static final String POSTS_REFERENCE = "Posts";
+    public static final String POSTS_OFFERS_REFERENCE = "Offers";
 
     public DatabaseReference getUsersProfileDBReference(){
         return database.getReference(USERS_PROFILE_REFERENCE);
@@ -21,6 +22,10 @@ public class MyFirebaseDatabaseClass {
 
     public DatabaseReference getUsersPostsDBReference(){
         return database.getReference(POSTS_REFERENCE);
+    }
+
+    public DatabaseReference getPostsOfferDBReference(){
+        return database.getReference(POSTS_OFFERS_REFERENCE);
     }
 
 }

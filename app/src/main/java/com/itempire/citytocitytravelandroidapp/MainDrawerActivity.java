@@ -63,7 +63,6 @@ public class MainDrawerActivity extends AppCompatActivity
         });
 
 
-
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -80,15 +79,15 @@ public class MainDrawerActivity extends AppCompatActivity
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                List<Post> list = new ArrayList<>();
+                List<Post> postsList = new ArrayList<>();
 
                 Iterable<DataSnapshot> childrenList = dataSnapshot.getChildren();
                 for (DataSnapshot child : childrenList) {
 
-                    list.add(child.getValue(Post.class));
+                    postsList.add(child.getValue(Post.class));
 
                 }
-                recycler_all_posts.setAdapter(new AdapterAllPosts(context, list));
+                recycler_all_posts.setAdapter(new AdapterAllPosts(context, postsList));
 
             }
 
