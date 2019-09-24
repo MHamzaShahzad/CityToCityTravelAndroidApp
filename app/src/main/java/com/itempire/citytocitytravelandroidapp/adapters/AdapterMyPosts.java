@@ -1,7 +1,6 @@
 package com.itempire.citytocitytravelandroidapp.adapters;
 
 import android.content.Context;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,49 +13,41 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.itempire.citytocitytravelandroidapp.CommonFeaturesClass;
 import com.itempire.citytocitytravelandroidapp.Constant;
-import com.itempire.citytocitytravelandroidapp.FragmentPostDescription;
+import com.itempire.citytocitytravelandroidapp.user.FragmentMyPostsDescription;
 import com.itempire.citytocitytravelandroidapp.R;
-import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
-import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
 import com.itempire.citytocitytravelandroidapp.models.Post;
-import com.itempire.citytocitytravelandroidapp.models.Vehicle;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class AdapterAllPosts extends RecyclerView.Adapter<AdapterAllPosts.Holder> {
+public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.Holder> {
 
     Context context;
     List<Post> list;
     private static Bundle bundle;
+    String category;
 
-    public AdapterAllPosts(Context context, List<Post> list) {
+    public AdapterMyPosts(Context context, List<Post> list, String category) {
         this.context = context;
         this.list = list;
+        this.category = category;
     }
 
     @NonNull
     @Override
-    public AdapterAllPosts.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterMyPosts.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_posts_card_design, null);
         return new Holder(layout);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final AdapterAllPosts.Holder holder, int position) {
+    public void onBindViewHolder(@NonNull final AdapterMyPosts.Holder holder, int position) {
 
         final Post post = list.get(position);
-
-
         CommonFeaturesClass.loadPostImage(holder.image_post_recycler, post);
-
-
         holder.post_data.setText(
                 post.getOwnerVehicleId() + "\n" +
                         post.getTotalNoOfSeatsAvailable() + "\n" +
@@ -68,7 +59,7 @@ public class AdapterAllPosts extends RecyclerView.Adapter<AdapterAllPosts.Holder
         holder.card_post_recycler.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentPostDescription postDescription = new FragmentPostDescription();
+                FragmentMyPostsDescription postDescription = new FragmentMyPostsDescription();
                 bundle = new Bundle();
                 bundle.putSerializable(Constant.POST_OBJECT_DESCRIPTION, list.get(holder.getAdapterPosition()));
                 postDescription.setArguments(bundle);
@@ -98,5 +89,4 @@ public class AdapterAllPosts extends RecyclerView.Adapter<AdapterAllPosts.Holder
         }
 
     }
-
 }

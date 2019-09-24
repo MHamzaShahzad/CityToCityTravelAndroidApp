@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     android:clickable="true"
-    tools:context=".FragmentCreatePost">
+    tools:context=".user.FragmentCreatePost">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,41 +17,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/create_posts_image"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:src="@drawable/placeholder_photos" />
-
-            <EditText
-                android:id="@+id/create_posts_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter your name..."
-                android:inputType="textPersonName" />
-
-            <EditText
-                android:id="@+id/create_posts_phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Phone number"
-                android:inputType="phone" />
-
-            <EditText
-                android:id="@+id/create_posts_vehicle_model"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Vehicle Model"
-                android:inputType="text" />
-
-            <EditText
-                android:id="@+id/create_posts_vehicle_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Vehicle Number"
-                android:inputType="number" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,85 +24,137 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/create_posts_dept_date_time"
+                    android:id="@+id/create_posts_dept_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.9"
+                    android:enabled="false"
+                    android:hint="Departure Date"
+                    />
+
+                <ImageView
+                    android:id="@+id/image_view_dept_date_calender"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_calender_black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/create_posts_dept_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:enabled="false"
                     android:hint="Departure Time"
                     />
 
                 <ImageView
-                    android:id="@+id/image_view_dept_time_calander"
+                    android:id="@+id/image_view_dept_time_pick"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.1"
-                    android:src="@drawable/ic_calander_black" />
+                    android:src="@drawable/ic_calender_black" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/create_posts_arrival_date_time"
+                    android:id="@+id/create_posts_arrival_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.9"
-                    android:hint="Estimated Arrival Time" />
+                    android:enabled="false"
+                    android:hint="Estimated Arrival Date" />
 
                 <ImageView
-                    android:id="@+id/image_view_arrival_time_calander"
+                    android:id="@+id/image_view_arrival_date_calender"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.1"
-                    android:src="@drawable/ic_calander_black" />
+                    android:src="@drawable/ic_calender_black" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/create_posts_dept_location"
+                    android:id="@+id/create_posts_arrival_time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.9"
-                    android:hint="Departure Location"
-                    android:editable="false"
-                    android:inputType="text" />
+                    android:enabled="false"
+                    android:hint="Arrival Time"
+                    />
+
+                <ImageView
+                    android:id="@+id/image_view_arrival_time_pick"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_calender_black" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/create_posts_dept_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:enabled="false"
+                    android:text="Departure Location"/>
 
                 <ImageView
                     android:id="@+id/image_view_dept_location"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/ic_location_black" />
-            </LinearLayout>
+                    android:src="@drawable/ic_location_black"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
-                <EditText
+                <TextView
                     android:id="@+id/create_posts_arrival_location"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.9"
-                    android:hint="Arrival Location"
-                    android:editable="false"
-                    android:inputType="text" />
+                    android:padding="5dp"
+                    android:enabled="false"
+                    android:text="Arrival Location"/>
 
                 <ImageView
                     android:id="@+id/image_view_arrival_location"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/ic_location_black" />
-            </LinearLayout>
+                    android:src="@drawable/ic_location_black"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -150,6 +167,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:hint="Departure City"
+                    android:enabled="false"
                     android:inputType="text" />
 
                 <EditText
@@ -158,6 +176,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:hint="Arrival City"
+                    android:enabled="false"
                     android:inputType="text" />
 
             </LinearLayout>

@@ -2,18 +2,28 @@ package com.itempire.citytocitytravelandroidapp.models;
 
 public class User {
 
-    String userName, userPhoneNumber, userAddress, userGender, userImageUrl, userAccountStatus;
+    String userId, userName, userPhoneNumber, userAddress, userGender, userImageUrl, userType;
 
     public User() {
     }
 
-    public User(String userName, String userPhoneNumber, String userAddress, String userGender, String userImageUrl, String userAccountStatus) {
+    public User(String userId, String userPhoneNumber) {
+        this.userId = userId;
+        this.userPhoneNumber = userPhoneNumber;
+    }
+
+    public User(String userId, String userName, String userPhoneNumber, String userAddress, String userGender, String userImageUrl, String userType) {
+        this.userId = userId;
         this.userName = userName;
         this.userPhoneNumber = userPhoneNumber;
         this.userAddress = userAddress;
         this.userGender = userGender;
         this.userImageUrl = userImageUrl;
-        this.userAccountStatus = userAccountStatus;
+        this.userType = userType;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getUserName() {
@@ -36,8 +46,8 @@ public class User {
         return userImageUrl;
     }
 
-    public String getUserAccountStatus() {
-        return userAccountStatus;
+    public String getUserType() {
+        return userType;
     }
 
 }

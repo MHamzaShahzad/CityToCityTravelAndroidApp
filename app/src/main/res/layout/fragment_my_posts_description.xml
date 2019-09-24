@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:clickable="true"
+    tools:context=".user.FragmentMyPostsDescription">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/image_my_post_description"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/placeholder_photos" />
+
+        <TextView
+            android:id="@+id/detail_my_post_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image_my_post_description" />
+
+
+        <TextView
+            android:id="@+id/heading_offer_requests_for_my_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_my_post_description"
+            android:text="Requests"
+            android:textSize="22sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_offer_requests_for_my_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/heading_offer_requests_for_my_post"
+            android:layout_margin="20dp" />
+
+        <Button
+            android:id="@+id/btnCompletePost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Complete this post"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"/>
+        <include layout="@layout/layout_no_data_found" />
+
+    </RelativeLayout>
+
+</FrameLayout>

@@ -13,32 +13,26 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyPrefLocalStorage;
-import com.itempire.citytocitytravelandroidapp.models.Post;
-import com.itempire.citytocitytravelandroidapp.models.User;
-import com.itempire.citytocitytravelandroidapp.models.UserDeviceToken;
+import com.itempire.citytocitytravelandroidapp.controllers.MyServicesControllerClass;
+import com.itempire.citytocitytravelandroidapp.user.SignUpActivity;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-
-import static com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass.GetCurrentFirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -54,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         context = this;
 
-        if (GetCurrentFirebaseUser() != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             startMainDrawer();
         }
 
@@ -108,11 +102,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .build(),
                 RC_SIGN_IN);
 
-
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
@@ -121,22 +114,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 Log.e(TAG, "onActivityResult: VALID_RESULT_CODE");
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
 
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference myRef = database.getReference("Users");
-                    DatabaseReference myRefToken = database.getReference("UsersTokens");
-
-                    myRefToken.child(user.getUid()).setValue(new UserDeviceToken(user.getUid(), new MyPrefLocalStorage(context).getDeviceToken(), null, null));
-
-                    myRef.child(user.getUid()).child("userPhoneNumber").setValue(user.getPhoneNumber()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    MyFirebaseDatabaseClass.USERS_PROFILE_REFERENCE.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful())
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            MyFirebaseCurrentUserClass.initFirebaseUser();
+                            if (dataSnapshot.getValue() == null) {
+
+                                startSignUpActivity();
+
+
+                            }else {
+
+                                HashMap<String, Object> userTokensMap = new HashMap<>();
+                                userTokensMap.put("userId", user.getUid());
+                                userTokensMap.put("deviceFBToken", new MyPrefLocalStorage(context).getDeviceToken());
+                                MyFirebaseDatabaseClass.USERS_TOKEN_REFERENCE.child(user.getUid()).updateChildren(userTokensMap);
+
+                                Toast.makeText(context, "LoggedIn Successfully!",Toast.LENGTH_LONG).show();
                                 startMainDrawer();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
                         }
                     });
+
 
                 }
                 // ...
@@ -153,7 +160,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startMainDrawer() {
+        MyServicesControllerClass.startCustomBackgroundService(context.getApplicationContext());
         startActivity(new Intent(MainActivity.this, MainDrawerActivity.class));
+        finish();
+    }
+
+    private void startSignUpActivity() {
+        startActivity(new Intent(MainActivity.this, SignUpActivity.class));
         finish();
     }
 
@@ -164,4 +177,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             showSignInOptions();
         }
     }
+
 }

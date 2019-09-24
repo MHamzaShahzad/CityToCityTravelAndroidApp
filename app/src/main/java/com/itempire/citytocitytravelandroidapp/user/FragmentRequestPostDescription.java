@@ -1,12 +1,15 @@
-package com.itempire.citytocitytravelandroidapp;
+package com.itempire.citytocitytravelandroidapp.user;
 
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,34 +17,42 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.itempire.citytocitytravelandroidapp.CommonFeaturesClass;
+import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.R;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
 import com.itempire.citytocitytravelandroidapp.models.AvailOffer;
 import com.itempire.citytocitytravelandroidapp.models.Post;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentPostDescription extends Fragment {
+public class FragmentRequestPostDescription extends Fragment {
 
-    Context context;
+    private static final String TAG = FragmentRequestPostDescription.class.getName();
+
     View view;
+    Context context;
 
     ImageView image_post_description;
     TextView detail_post_description;
-    Button btn_avail_offer;
+    Button btn_avail_offer, btn_cancel_offer;
+    RelativeLayout layout_btn_avail_cancel_request;
 
-    public FragmentPostDescription() {
+
+    public FragmentRequestPostDescription() {
         // Required empty public constructor
     }
 
@@ -51,14 +62,17 @@ public class FragmentPostDescription extends Fragment {
         context = container.getContext();
         // Inflate the layout for this fragment
         if (view == null) {
-            view = inflater.inflate(R.layout.fragment_post_description, container, false);
+            view = inflater.inflate(R.layout.fragment_request_post_description, container, false);
 
+            layout_btn_avail_cancel_request = (RelativeLayout) view.findViewById(R.id.layout_btn_avail_cancel_request);
             image_post_description = (ImageView) view.findViewById(R.id.image_post_description);
             detail_post_description = (TextView) view.findViewById(R.id.detail_post_description);
             btn_avail_offer = (Button) view.findViewById(R.id.btn_avail_offer);
+            btn_cancel_offer = (Button) view.findViewById(R.id.btn_cancel_offer);
 
 
             loadData();
+
         }
         return view;
     }
@@ -74,10 +88,13 @@ public class FragmentPostDescription extends Fragment {
                             post.getDepartureCity() + "\n" +
                             post.getDepartureLocation() + "\n"
             );
-            if (post.getOwnerVehicleId().equals(MyFirebaseCurrentUserClass.mUser.getUid()))
-                btn_avail_offer.setVisibility(View.GONE);
-            else
-                setBtn_avail_offer(post);
+
+            if (getArguments().getString(Constant.OFFER_OR_POST_STATUS) != null && !getArguments().getString(Constant.OFFER_OR_POST_STATUS).equals(Constant.OFFER_PENDING_STATUS))
+                layout_btn_avail_cancel_request.setVisibility(View.GONE);
+
+            setBtn_avail_offer(post);
+            setBtn_cancel_offer(post);
+
         }
     }
 
@@ -90,7 +107,16 @@ public class FragmentPostDescription extends Fragment {
         });
     }
 
-    private void dialogForOfferRequest(final Post post){
+    private void setBtn_cancel_offer(final Post post) {
+        btn_cancel_offer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogForCancelRequest(post);
+            }
+        });
+    }
+
+    private void dialogForOfferRequest(final Post post) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = getLayoutInflater().inflate(R.layout.layout_request_offer_dialog, null);
@@ -104,12 +130,12 @@ public class FragmentPostDescription extends Fragment {
         btn_send_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (no_of_seats.length() == 0){
+                if (no_of_seats.length() == 0) {
                     no_of_seats.setError("Field is required!");
                     return;
                 }
                 Date date = new Date();
-                 MyFirebaseDatabaseClass.POSTS_OFFERS_REFERENCE.child(post.getPostId()).child(MyFirebaseCurrentUserClass.mUser.getUid()).setValue(
+                MyFirebaseDatabaseClass.POSTS_OFFERS_REFERENCE.child(post.getPostId()).child(MyFirebaseCurrentUserClass.mUser.getUid()).setValue(
                         new AvailOffer(
                                 post.getPostId(),
                                 post.getOwnerVehicleId(),
@@ -136,6 +162,34 @@ public class FragmentPostDescription extends Fragment {
                 dialog.dismiss();
             }
         });
+
+    }
+
+    private void dialogForCancelRequest(final Post post) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Your request for this post wil be deleted");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                MyFirebaseDatabaseClass.POSTS_OFFERS_REFERENCE.child(post.getPostId()).child(MyFirebaseCurrentUserClass.mUser.getUid()).setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(context, "Request cancelled successfully!", Toast.LENGTH_LONG).show();
+                        ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                builder.setCancelable(true);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
 
     }
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -18,31 +19,41 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.itempire.citytocitytravelandroidapp.adapters.AdapterAllPosts;
+import com.itempire.citytocitytravelandroidapp.admin.FragmentAllVehicles;
+import com.itempire.citytocitytravelandroidapp.admin.FragmentUsersAndAdmins;
+import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
-import com.itempire.citytocitytravelandroidapp.models.Post;
+import com.itempire.citytocitytravelandroidapp.controllers.MyPrefLocalStorage;
+import com.itempire.citytocitytravelandroidapp.models.User;
+import com.itempire.citytocitytravelandroidapp.models.Vehicle;
+import com.itempire.citytocitytravelandroidapp.user.FragmentAllActivePosts;
+import com.itempire.citytocitytravelandroidapp.user.FragmentCreatePost;
+import com.itempire.citytocitytravelandroidapp.user.FragmentUploadVehicle;
+import com.itempire.citytocitytravelandroidapp.user.FragmentUserProfile;
+import com.itempire.citytocitytravelandroidapp.user.OffersFragmentComplete;
+import com.itempire.citytocitytravelandroidapp.user.MyPostsFragmentComplete;
+import com.squareup.picasso.Picasso;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass.SignOut;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MainDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG = MainDrawerActivity.class.getName();
+
     private Context context;
     private static DrawerLayout drawer;
+    public static ValueEventListener userTypeEventListener;
 
-    RecyclerView recycler_all_posts;
+    public static ImageView userNavHeaderImage;
+    public static TextView userNavHeaderName, headerPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,33 +82,12 @@ public class MainDrawerActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        recycler_all_posts = (RecyclerView) findViewById(R.id.recycler_all_posts);
-        recycler_all_posts.setHasFixedSize(true);
-        recycler_all_posts.setLayoutManager(new LinearLayoutManager(context));
 
-        new MyFirebaseDatabaseClass().getUsersPostsDBReference().addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                List<Post> postsList = new ArrayList<>();
-
-                Iterable<DataSnapshot> childrenList = dataSnapshot.getChildren();
-                for (DataSnapshot child : childrenList) {
-
-                    postsList.add(child.getValue(Post.class));
-
-                }
-                recycler_all_posts.setAdapter(new AdapterAllPosts(context, postsList));
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        initHeaderWidgets(navigationView.getHeaderView(0));
+        getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentAllActivePosts()).commit();
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -110,9 +100,30 @@ public class MainDrawerActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_drawer, menu);
+        userTypeEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    Log.e(TAG, "onDataChange: " + dataSnapshot.getValue());
+                    switch (dataSnapshot.getValue().toString()) {
+                        case Constant.USER_TYPE_ADMIN:
+                            getMenuInflater().inflate(R.menu.main_drawer, menu);
+                            break;
+                        case Constant.USER_TYPE_NON_ADMIN:
+                            menu.clear();
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        MyFirebaseDatabaseClass.USERS_PROFILE_REFERENCE.child(MyFirebaseCurrentUserClass.mUser.getUid()).child("userType").addValueEventListener(userTypeEventListener);
         return true;
     }
 
@@ -124,7 +135,11 @@ public class MainDrawerActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_users_admins) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentUsersAndAdmins()).addToBackStack(null).commit();
+            return true;
+        }else if (id == R.id.action_vehicles) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentAllVehicles()).addToBackStack(null).commit();
             return true;
         }
 
@@ -137,18 +152,52 @@ public class MainDrawerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        clearFragmentBackStack();
+
         if (id == R.id.nav_home) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_my_posts) {
 
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new MyPostsFragmentComplete(context)).addToBackStack(null).commit();
+
+        } else if (id == R.id.nav_my_requests) {
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new OffersFragmentComplete(context)).addToBackStack(null).commit();
+
+        } else if (id == R.id.nav_my_vehicle) {
+
+            MyFirebaseDatabaseClass.VEHICLES_REFERENCE.child(MyFirebaseCurrentUserClass.mUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null){
+                        try{
+                            Vehicle vehicle = dataSnapshot.getValue(Vehicle.class);
+                            if (vehicle != null){
+                                FragmentVehicleDescription fragmentVehicleDescription = new FragmentVehicleDescription();
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable(Constant.VEHICLE_DESCRIPTION_NAME, vehicle);
+                                bundle.putBoolean(Constant.VEHICLE_DESCRIPTION_USER, true);
+                                fragmentVehicleDescription.setArguments(bundle);
+                                getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, fragmentVehicleDescription).addToBackStack(null).commit();
+
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         } else if (id == R.id.nav_create_post) {
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentCreatePost(context)).addToBackStack(null).commit();
-
-        } else if (id == R.id.nav_tools) {
+            checkIfVehicleAlreadyUploaded();
 
         } else if (id == R.id.nav_logout) {
-            SignOut(context);
+            MyFirebaseCurrentUserClass.SignOut(context);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -161,5 +210,75 @@ public class MainDrawerActivity extends AppCompatActivity
         return true;
     }
 
+
+
+    private void initHeaderWidgets(View view){
+        if (view != null) {
+            userNavHeaderImage = view.findViewById(R.id.headerImageView);
+            userNavHeaderName = view.findViewById(R.id.headerUserName);
+            headerPhoneNumber = view.findViewById(R.id.headerPhoneNumber);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentUserProfile()).addToBackStack(null).commit();
+                }
+            });
+        }
+    }
+
+    public static void updateUserInNavHeader(User user){
+        if (user != null){
+            if (user.getUserImageUrl() != null)
+                try {
+                    Picasso.get().load(user.getUserImageUrl()).placeholder(R.drawable.user_avatar).fit().into(userNavHeaderImage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            userNavHeaderName.setText(user.getUserName());
+            headerPhoneNumber.setText(user.getUserPhoneNumber());
+        }
+    }
+
+    private void checkIfVehicleAlreadyUploaded() {
+        MyFirebaseDatabaseClass.VEHICLES_REFERENCE.child(MyFirebaseCurrentUserClass.mUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentUploadVehicle()).addToBackStack(null).commit();
+                } else {
+                    try {
+                        Vehicle vehicle = dataSnapshot.getValue(Vehicle.class);
+                        if (vehicle != null) {
+                            if (vehicle.getVehicleStatus().equals(Constant.VEHICLE_STATUS_ACTIVE))
+                                getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentCreatePost()).addToBackStack(null).commit();
+                            else
+                                CommonFeaturesClass.showCustomDialog(context, "Vehicle Authentication", "Vehicle not registered yet, please try later.");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void clearFragmentBackStack() {
+        for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
+            getSupportFragmentManager().popBackStack();
+        }
+    }
+
+    public static void removeUserValueEventListener() {
+        if (userTypeEventListener != null)
+            MyFirebaseDatabaseClass.USERS_PROFILE_REFERENCE.child(MyFirebaseCurrentUserClass.mUser.getUid()).child("userType").removeEventListener(userTypeEventListener);
+
+    }
 
 }

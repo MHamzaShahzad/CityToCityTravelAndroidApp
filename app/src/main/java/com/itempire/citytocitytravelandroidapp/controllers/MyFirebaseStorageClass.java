@@ -6,15 +6,8 @@ import com.google.firebase.storage.StorageReference;
 public class MyFirebaseStorageClass {
 
     public static FirebaseStorage storage = FirebaseStorage.getInstance();
-    public static String USER_IMAGES_REFERENCE = "user_images/";
-    public static String POSTS_IMAGES_REFERENCE = "post_images/";
 
-    public StorageReference getUserImagesReference(){
-        return storage.getReference().child(USER_IMAGES_REFERENCE);
+    public static StorageReference USER_IMAGES_REFERENCE = storage.getReference().child("user_images/");
+    public static StorageReference VEHICLE_IMAGES_REFERENCE = storage.getReference().child("post_images/");
 
-    }
-
-    public StorageReference getPostsImagesReference(){
-        return storage.getReference().child(POSTS_IMAGES_REFERENCE);
-    }
 }

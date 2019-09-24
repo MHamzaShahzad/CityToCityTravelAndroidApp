@@ -6,7 +6,7 @@
     <string name="title_activity_main_drawer">MainDrawerActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_title">User Name</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
@@ -18,9 +18,10 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="menu_logout">Logout</string>
-    <string name="google_maps_key">AIzaSyAGomIGYawWMiJ-WzSil35AXgBECV2LJZY</string>
+    <string name="google_maps_key">AIzaSyD5D4LI8qZDDSzk6NPxnPzYk5C79C8nbf8</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_data_found">No Data Found</string>
 
 </resources>

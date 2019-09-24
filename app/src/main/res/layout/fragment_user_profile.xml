@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     android:clickable="true"
-    tools:context=".FragmentUserProfile">
+    tools:context=".user.FragmentUserProfile">
 
     <TextView
         android:layout_width="match_parent"

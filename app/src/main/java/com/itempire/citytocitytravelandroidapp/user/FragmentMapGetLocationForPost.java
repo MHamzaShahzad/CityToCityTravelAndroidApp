@@ -1,4 +1,4 @@
-package com.itempire.citytocitytravelandroidapp;
+package com.itempire.citytocitytravelandroidapp.user;
 
 
 import android.Manifest;
@@ -39,12 +39,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+
+import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.R;
 
 import java.util.List;
 import java.util.Locale;
@@ -66,23 +66,26 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
 
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
+    private boolean shouldMoveToCurrentLocation = true;
 
-    public FragmentMapGetLocationForPost(Context context) {
+    private String cityName;
+
+    public FragmentMapGetLocationForPost() {
         // Required empty public constructor
-        this.context = context;
         mLocationRequest = new LocationRequest();
 
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        context = container.getContext();
+
         // Inflate the layout for this fragment
         if (view == null) {
 
-            view = inflater.inflate(R.layout.fragment_fragment_map_get_location_for_post, container, false);
+            view = inflater.inflate(R.layout.fragment_map_get_location_for_post, container, false);
 
             text_location_address = (TextView) view.findViewById(R.id.text_location_address);
             btn_submit_location = (ImageView) view.findViewById(R.id.btn_submit_location);
@@ -93,40 +96,6 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
 
         }
         return view;
-    }
-
-    private void initClickListeners(){
-        text_location_address.setOnClickListener(this);
-        btn_submit_location.setOnClickListener(this);
-    }
-
-    private void initMap() {
-        try {
-
-            SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                    .findFragmentById(R.id.fragment_map);
-            mapFragment.getMapAsync(this);
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-        }
-    }
-
-
-    private void setGoogleClientForMap() {
-        mLocationClient = new GoogleApiClient.Builder(context)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
-        mLocationRequest.setInterval(20000);
-        mLocationRequest.setFastestInterval(5000);
-
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationClient.connect();
     }
 
     @Override
@@ -149,7 +118,10 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
             markerOptions.title("Your current Location!");
             mMap.addMarker(markerOptions);
             float zoomLevel = 16.0f; //This goes up to 21
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
+            if (shouldMoveToCurrentLocation) {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
+                shouldMoveToCurrentLocation = false;
+            }
             mMap.addCircle(new CircleOptions()
                     .center(latLng)
                     .radius(100)
@@ -183,28 +155,65 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
 
     }
 
-    private String getCompleteAddressString(Context context, double LATITUDE, double LONGITUDE) {
-        String strAdd = null;
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
-            if (addresses != null) {
-                Address returnedAddress = addresses.get(0);
-                StringBuilder strReturnedAddress = new StringBuilder("");
-
-                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.text_location_address:
+                setSelect_location();
+                break;
+            case R.id.btn_submit_location:
+                if (getArguments() != null) {
+                    Intent intent = new Intent(Constant.LOCATION_RECEIVING_FILTER);
+                    if (getArguments().getBoolean(Constant.DEPT_LOCATION_KEY)) {
+                        intent.putExtra(Constant.DEPT_LOCATION_KEY, true);
+                    }
+                    if (getArguments().getBoolean(Constant.ARRIVAL_LOCATION_KEY)) {
+                        intent.putExtra(Constant.ARRIVAL_LOCATION_KEY, true);
+                    }
+                    intent.putExtra(Constant.LOCATION_ADDRESS_CITY, cityName);
+                    intent.putExtra(Constant.LOCATION_ADDRESS, text_location_address.getText().toString().trim());
+                    intent.putExtra(Constant.LOCATION_LATITUDE, String.valueOf(latLng.latitude));
+                    intent.putExtra(Constant.LOCATION_LONGITUDE, String.valueOf(latLng.longitude));
+                    context.sendBroadcast(intent);
+                    ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
+                    break;
                 }
-                strAdd = strReturnedAddress.toString();
-                Log.e("@LocationAddress", "My Current loction address" + strReturnedAddress.toString());
-            } else {
-                Log.e("@AddressNotFound", "My Current loction address No Address returned!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("@ErrinInAAddress", "My Current loction address Canont get Address!");
         }
-        return strAdd;
+    }
+
+
+
+    private void initClickListeners() {
+        text_location_address.setOnClickListener(this);
+        btn_submit_location.setOnClickListener(this);
+    }
+
+    private void initMap() {
+        try {
+
+            SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                    .findFragmentById(R.id.fragment_map);
+            mapFragment.getMapAsync(this);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+    }
+
+    private void setGoogleClientForMap() {
+        mLocationClient = new GoogleApiClient.Builder(context)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        mLocationRequest.setInterval(20000);
+        mLocationRequest.setFastestInterval(5000);
+
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationClient.connect();
     }
 
     private void setSelect_location() {
@@ -229,15 +238,29 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.text_location_address:
-                setSelect_location();
-                break;
-            case R.id.btn_submit_location:
+    private String getCompleteAddressString(Context context, double LATITUDE, double LONGITUDE) {
+        String strAdd = null;
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                cityName = returnedAddress.getLocality();
+                StringBuilder strReturnedAddress = new StringBuilder("");
 
-                break;
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.e("@LocationAddress", "My Current loction address" + strReturnedAddress.toString());
+            } else {
+                Log.e("@AddressNotFound", "My Current loction address No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("@ErrinInAAddress", "My Current loction address Canont get Address!");
         }
+        return strAdd;
     }
+
 }

@@ -7,25 +7,10 @@ public class MyFirebaseDatabaseClass {
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    public static final String USERS_PROFILE_REFERENCE = "Users";
-    public static final String USERS_TOKEN_REFERENCE = "UsersTokens";
-    public static final String POSTS_REFERENCE = "Posts";
-    public static final String POSTS_OFFERS_REFERENCE = "Offers";
-
-    public DatabaseReference getUsersProfileDBReference(){
-        return database.getReference(USERS_PROFILE_REFERENCE);
-    }
-
-    public DatabaseReference getUsersTokenDBReference(){
-        return database.getReference(USERS_TOKEN_REFERENCE);
-    }
-
-    public DatabaseReference getUsersPostsDBReference(){
-        return database.getReference(POSTS_REFERENCE);
-    }
-
-    public DatabaseReference getPostsOfferDBReference(){
-        return database.getReference(POSTS_OFFERS_REFERENCE);
-    }
+    public static final DatabaseReference USERS_PROFILE_REFERENCE = database.getReference("Users");
+    public static final DatabaseReference USERS_TOKEN_REFERENCE = database.getReference("UsersTokens");
+    public static final DatabaseReference VEHICLES_REFERENCE = database.getReference("Vehicles");
+    public static final DatabaseReference POSTS_REFERENCE = database.getReference("Posts");
+    public static final DatabaseReference POSTS_OFFERS_REFERENCE = database.getReference("Offers");
 
 }
