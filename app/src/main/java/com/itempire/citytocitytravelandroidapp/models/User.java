@@ -1,6 +1,8 @@
 package com.itempire.citytocitytravelandroidapp.models;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     String userId, userName, userPhoneNumber, userAddress, userGender, userImageUrl, userType;
 

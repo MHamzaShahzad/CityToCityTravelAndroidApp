@@ -221,6 +221,8 @@ public class MainDrawerActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentUserProfile()).addToBackStack(null).commit();
+                    if (drawer != null)
+                        drawer.closeDrawer(GravityCompat.START);
                 }
             });
         }

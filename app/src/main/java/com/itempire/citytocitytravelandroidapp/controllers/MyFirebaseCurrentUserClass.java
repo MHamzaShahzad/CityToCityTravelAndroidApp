@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.itempire.citytocitytravelandroidapp.MainActivity;
 import com.itempire.citytocitytravelandroidapp.MainDrawerActivity;
 import com.itempire.citytocitytravelandroidapp.models.User;
+import com.itempire.citytocitytravelandroidapp.user.FragmentUserProfile;
 
 public class MyFirebaseCurrentUserClass {
 
@@ -69,8 +70,10 @@ public class MyFirebaseCurrentUserClass {
                 if (dataSnapshot.getValue() != null)
                     try {
                         User user = dataSnapshot.getValue(User.class);
+
                         MyPrefLocalStorage.saveCurrentUserData(context, user);
                         MainDrawerActivity.updateUserInNavHeader(user);
+
                         Log.d(TAG, "onDataChange: " + dataSnapshot + "\n" + MyPrefLocalStorage.getCurrentUserData(context).getUserPhoneNumber());
 
                     } catch (Exception e) {

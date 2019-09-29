@@ -29,9 +29,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Avail Offer"
-            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true" />
+            android:layout_below="@id/detail_post_description"/>
+
+        <LinearLayout
+            android:id="@+id/layout_call_sms_vehicle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/send_sms_to_owner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="SMS" />
+
+            <Button
+                android:id="@+id/call_to_owner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Call" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 

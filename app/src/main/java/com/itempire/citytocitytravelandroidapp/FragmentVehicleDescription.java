@@ -45,16 +45,16 @@ import java.util.List;
 public class FragmentVehicleDescription extends Fragment implements View.OnClickListener {
 
     private static final String TAG = FragmentVehicleDescription.class.getName();
-    Context context;
-    View view;
-    Vehicle vehicle;
-    List<Post> myActivePosts;
-    ImageView vehicleImage, profileImage;
-    Button btnActiveInActiveVehicle, send_sms_to_owner, call_to_owner, btnRemoveVehicle;
-    TextView vehicleModelPlace, vehicleNumberPlace, name, phoneNumber;
-    LinearLayout layout_edit_remove_vehicle, layout_call_sms_vehicle;
+    private Context context;
+    private View view;
+    private Vehicle vehicle;
+    private List<Post> myActivePosts;
+    private ImageView vehicleImage, profileImage;
+    private Button btnActiveInActiveVehicle, send_sms_to_owner, call_to_owner, btnRemoveVehicle;
+    private TextView vehicleModelPlace, vehicleNumberPlace, name, phoneNumber;
+    private LinearLayout layout_edit_remove_vehicle, layout_call_sms_vehicle;
 
-    Bundle bundleArgument;
+    private Bundle bundleArgument;
     private static final String VEHICLE_BUTTON_TEXT_ACTIVE = "Active";
     private static final String VEHICLE_BUTTON_TEXT_INACTIVE = "In-Active";
 
@@ -66,76 +66,97 @@ public class FragmentVehicleDescription extends Fragment implements View.OnClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = container.getContext();
+        bundleArgument = getArguments();
         // Inflate the layout for this fragment
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_vehicle_description, container, false);
+
             getLayoutWidgets();
-            setClickListeners();
+            initClickListeners();
 
-            bundleArgument = getArguments();
-            if (bundleArgument != null && bundleArgument.getSerializable(Constant.VEHICLE_DESCRIPTION_NAME) != null) {
-                vehicle = (Vehicle) bundleArgument.getSerializable(Constant.VEHICLE_DESCRIPTION_NAME);
-                if (vehicle != null) {
-
-                    if (vehicle.getVehicleImage() != null)
-                        try {
-                            Picasso.get().load(vehicle.getVehicleImage()).placeholder(R.drawable.placeholder_photos).fit().into(vehicleImage);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    if (bundleArgument.getBoolean(Constant.VEHICLE_DESCRIPTION_ADMIN)) {
-                        layout_call_sms_vehicle.setVisibility(View.VISIBLE);
-                    }
-
-                    if (bundleArgument.getBoolean(Constant.VEHICLE_DESCRIPTION_USER)) {
-                        layout_edit_remove_vehicle.setVisibility(View.VISIBLE);
-                        btnActiveInActiveVehicle.setVisibility(View.GONE);
-                    }
-
-                    MyFirebaseDatabaseClass.USERS_PROFILE_REFERENCE.child(vehicle.getVehicleOwnerId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.getValue() != null) {
-
-                                try {
-
-                                    User user = dataSnapshot.getValue(User.class);
-                                    if (user != null) {
-                                        if (user.getUserImageUrl() != null)
-                                            try {
-                                                Picasso.get().load(user.getUserImageUrl()).placeholder(R.drawable.user_avatar).fit().into(profileImage);
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-
-                                        name.setText(user.getUserName());
-                                        phoneNumber.setText(user.getUserPhoneNumber());
-                                    }
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-                    vehicleModelPlace.setText(vehicle.getVehicleModel());
-                    vehicleNumberPlace.setText(vehicle.getVehicleNumber());
-
-                    setTextToButton();
-
-                }
-            }
-
+            setDefaultVehicleData();
         }
         return view;
+    }
+
+    private void setDefaultVehicleData(){
+        if (bundleArgument != null && bundleArgument.getSerializable(Constant.VEHICLE_DESCRIPTION_NAME) != null) {
+            vehicle = (Vehicle) bundleArgument.getSerializable(Constant.VEHICLE_DESCRIPTION_NAME);
+            if (vehicle != null) {
+
+                if (vehicle.getVehicleImage() != null)
+                    try {
+                        Picasso.get().load(vehicle.getVehicleImage()).placeholder(R.drawable.placeholder_photos).fit().into(vehicleImage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                if (bundleArgument.getBoolean(Constant.VEHICLE_DESCRIPTION_ADMIN)) {
+                    layout_call_sms_vehicle.setVisibility(View.VISIBLE);
+
+                }
+
+                if (bundleArgument.getBoolean(Constant.VEHICLE_DESCRIPTION_USER)) {
+                    layout_edit_remove_vehicle.setVisibility(View.VISIBLE);
+                    btnActiveInActiveVehicle.setVisibility(View.GONE);
+                }
+
+                MyFirebaseDatabaseClass.USERS_PROFILE_REFERENCE.child(vehicle.getVehicleOwnerId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() != null) {
+
+                            try {
+
+                                User user = dataSnapshot.getValue(User.class);
+                                if (user != null) {
+                                    if (user.getUserImageUrl() != null)
+                                        try {
+                                            Picasso.get().load(user.getUserImageUrl()).placeholder(R.drawable.user_avatar).fit().into(profileImage);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    name.setText(user.getUserName());
+                                    phoneNumber.setText(user.getUserPhoneNumber());
+                                    setCallSmsListeners(user.getUserPhoneNumber());
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                vehicleModelPlace.setText(vehicle.getVehicleModel());
+                vehicleNumberPlace.setText(vehicle.getVehicleNumber());
+
+                setTextToButton();
+
+            }
+        }
+    }
+
+    private void setCallSmsListeners(final String phoneNumber){
+        call_to_owner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommonFeaturesClass.setCall_to_owner(context, phoneNumber);
+            }
+        });
+        send_sms_to_owner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommonFeaturesClass.setSend_sms_to_owner(context, phoneNumber);
+            }
+        });
     }
 
     private void getLayoutWidgets() {
@@ -158,11 +179,9 @@ public class FragmentVehicleDescription extends Fragment implements View.OnClick
         btnRemoveVehicle = view.findViewById(R.id.btnRemoveVehicle);
     }
 
-    private void setClickListeners() {
+    private void initClickListeners() {
 
         btnActiveInActiveVehicle.setOnClickListener(this);
-        send_sms_to_owner.setOnClickListener(this);
-        call_to_owner.setOnClickListener(this);
         btnRemoveVehicle.setOnClickListener(this);
     }
 
@@ -185,10 +204,6 @@ public class FragmentVehicleDescription extends Fragment implements View.OnClick
             case R.id.btnRemoveVehicle:
                 Log.e(TAG, "onClick: ");
                 removeMyVehicle();
-                break;
-            case R.id.send_sms_to_owner:
-                break;
-            case R.id.call_to_owner:
                 break;
         }
 

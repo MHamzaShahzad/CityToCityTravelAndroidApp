@@ -19,10 +19,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
 import com.itempire.citytocitytravelandroidapp.models.AvailOffer;
 import com.itempire.citytocitytravelandroidapp.models.Post;
+import com.itempire.citytocitytravelandroidapp.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -39,7 +43,7 @@ public class FragmentPostDescription extends Fragment {
 
     ImageView image_post_description;
     TextView detail_post_description;
-    Button btn_avail_offer;
+    Button btn_avail_offer, send_sms_to_owner, call_to_owner;
 
     public FragmentPostDescription() {
         // Required empty public constructor
@@ -56,6 +60,8 @@ public class FragmentPostDescription extends Fragment {
             image_post_description = (ImageView) view.findViewById(R.id.image_post_description);
             detail_post_description = (TextView) view.findViewById(R.id.detail_post_description);
             btn_avail_offer = (Button) view.findViewById(R.id.btn_avail_offer);
+            send_sms_to_owner = view.findViewById(R.id.send_sms_to_owner);
+            call_to_owner = view.findViewById(R.id.call_to_owner);
 
 
             loadData();
@@ -74,11 +80,51 @@ public class FragmentPostDescription extends Fragment {
                             post.getDepartureCity() + "\n" +
                             post.getDepartureLocation() + "\n"
             );
+
+            getPostOwnerData(post.getOwnerVehicleId());
+
             if (post.getOwnerVehicleId().equals(MyFirebaseCurrentUserClass.mUser.getUid()))
                 btn_avail_offer.setVisibility(View.GONE);
             else
                 setBtn_avail_offer(post);
         }
+    }
+
+    private void getPostOwnerData(String ownerId) {
+        MyFirebaseDatabaseClass.USERS_PROFILE_REFERENCE.child(ownerId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+                    try {
+                        User user = dataSnapshot.getValue(User.class);
+                        if (user != null)
+                            setCallSmsListeners(user.getUserPhoneNumber());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setCallSmsListeners(final String phoneNumber) {
+        call_to_owner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommonFeaturesClass.setCall_to_owner(context, phoneNumber);
+            }
+        });
+        send_sms_to_owner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommonFeaturesClass.setSend_sms_to_owner(context, phoneNumber);
+            }
+        });
     }
 
     private void setBtn_avail_offer(final Post post) {
@@ -90,7 +136,7 @@ public class FragmentPostDescription extends Fragment {
         });
     }
 
-    private void dialogForOfferRequest(final Post post){
+    private void dialogForOfferRequest(final Post post) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = getLayoutInflater().inflate(R.layout.layout_request_offer_dialog, null);
@@ -104,12 +150,12 @@ public class FragmentPostDescription extends Fragment {
         btn_send_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (no_of_seats.length() == 0){
+                if (no_of_seats.length() == 0) {
                     no_of_seats.setError("Field is required!");
                     return;
                 }
                 Date date = new Date();
-                 MyFirebaseDatabaseClass.POSTS_OFFERS_REFERENCE.child(post.getPostId()).child(MyFirebaseCurrentUserClass.mUser.getUid()).setValue(
+                MyFirebaseDatabaseClass.POSTS_OFFERS_REFERENCE.child(post.getPostId()).child(MyFirebaseCurrentUserClass.mUser.getUid()).setValue(
                         new AvailOffer(
                                 post.getPostId(),
                                 post.getOwnerVehicleId(),
