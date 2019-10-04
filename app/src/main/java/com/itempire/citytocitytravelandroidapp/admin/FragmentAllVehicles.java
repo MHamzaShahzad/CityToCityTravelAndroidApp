@@ -1,6 +1,7 @@
 package com.itempire.citytocitytravelandroidapp.admin;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -20,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.FragmentInteractionListenerInterface;
 import com.itempire.citytocitytravelandroidapp.R;
 import com.itempire.citytocitytravelandroidapp.adapters.AdapterVehiclesListAdmin;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
@@ -43,6 +45,8 @@ public class FragmentAllVehicles extends Fragment {
     ValueEventListener valueEventListener;
     AdapterVehiclesListAdmin adapterVehiclesListAdmin;
 
+    private FragmentInteractionListenerInterface mListener;
+
     public FragmentAllVehicles() {
         // Required empty public constructor
         list = new ArrayList<>();
@@ -54,6 +58,8 @@ public class FragmentAllVehicles extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = container.getContext();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_VEHICLES_LIST);
         // Inflate the layout for this fragment
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_all_vehicles, container, false);
@@ -178,5 +184,29 @@ public class FragmentAllVehicles extends Fragment {
         super.onDestroy();
         if (valueEventListener != null)
             MyFirebaseDatabaseClass.VEHICLES_REFERENCE.removeEventListener(valueEventListener);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentInteractionListenerInterface) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement FragmentInteractionListenerInterface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListener != null) {
+            mListener.onFragmentInteraction(Constant.TITLE_VEHICLES_LIST);
+        }
     }
 }

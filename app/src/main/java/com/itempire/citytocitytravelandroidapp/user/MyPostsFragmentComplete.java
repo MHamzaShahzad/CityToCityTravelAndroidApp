@@ -1,6 +1,7 @@
 package com.itempire.citytocitytravelandroidapp.user;
 
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.FragmentInteractionListenerInterface;
 import com.itempire.citytocitytravelandroidapp.R;
 import com.itempire.citytocitytravelandroidapp.adapters.AdapterCategoriesList;
 import com.itempire.citytocitytravelandroidapp.adapters.AdapterMyPosts;
@@ -47,6 +49,8 @@ public class MyPostsFragmentComplete extends Fragment {
     BroadcastReceiver receiverSelectedCategory;
     static ValueEventListener valueEventListener;
     DatabaseReference postsDBRef;
+
+    private FragmentInteractionListenerInterface mListener;
 
     public MyPostsFragmentComplete(Context context) {
         // Required empty public constructor
@@ -74,6 +78,8 @@ public class MyPostsFragmentComplete extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_MY_POSTS);
         // Inflate the layout for this fragment
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_my_posts_fragment_complete, container, false);
@@ -168,6 +174,29 @@ public class MyPostsFragmentComplete extends Fragment {
     private void unRegisterCustomReceiver() {
         if (receiverSelectedCategory != null)
             context.unregisterReceiver(receiverSelectedCategory);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentInteractionListenerInterface) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement FragmentInteractionListenerInterface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_MY_POSTS);
     }
 
 }

@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.FragmentInteractionListenerInterface;
 import com.itempire.citytocitytravelandroidapp.R;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
@@ -40,6 +41,7 @@ public class FragmentUserProfile extends Fragment {
 
     private ValueEventListener userProfileEventListener;
 
+    private FragmentInteractionListenerInterface mListener;
 
     public FragmentUserProfile() {
     }
@@ -48,6 +50,8 @@ public class FragmentUserProfile extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = container.getContext();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_PROFILE);
         // Inflate the layout for this fragment
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_user_profile, container, false);
@@ -133,6 +137,29 @@ public class FragmentUserProfile extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         removeValueEventListener();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentInteractionListenerInterface) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement FragmentInteractionListenerInterface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_PROFILE);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.itempire.citytocitytravelandroidapp.user;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.FragmentInteractionListenerInterface;
 import com.itempire.citytocitytravelandroidapp.R;
 import com.itempire.citytocitytravelandroidapp.adapters.AdapterAllPosts;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
@@ -36,6 +38,7 @@ public class FragmentAllActivePosts extends Fragment {
     RecyclerView recycler_all_posts;
     ValueEventListener valueEventListener;
 
+    private FragmentInteractionListenerInterface mListener;
 
     public FragmentAllActivePosts() {
         // Required empty public constructor
@@ -47,7 +50,8 @@ public class FragmentAllActivePosts extends Fragment {
                              Bundle savedInstanceState) {
 
         context = container.getContext();
-
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_HOME);
         // Inflate the layout for this fragment
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_all_active_posts, container, false);
@@ -107,4 +111,26 @@ public class FragmentAllActivePosts extends Fragment {
             MyFirebaseDatabaseClass.POSTS_REFERENCE.removeEventListener(valueEventListener);
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentInteractionListenerInterface) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement FragmentInteractionListenerInterface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_HOME);
+    }
 }

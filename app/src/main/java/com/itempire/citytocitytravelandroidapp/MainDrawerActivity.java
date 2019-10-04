@@ -44,7 +44,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainDrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentInteractionListenerInterface{
 
     private static final String TAG = MainDrawerActivity.class.getName();
 
@@ -281,6 +281,12 @@ public class MainDrawerActivity extends AppCompatActivity
         if (userTypeEventListener != null)
             MyFirebaseDatabaseClass.USERS_PROFILE_REFERENCE.child(MyFirebaseCurrentUserClass.mUser.getUid()).child("userType").removeEventListener(userTypeEventListener);
 
+    }
+
+    @Override
+    public void onFragmentInteraction(String title) {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(title);
     }
 
 }

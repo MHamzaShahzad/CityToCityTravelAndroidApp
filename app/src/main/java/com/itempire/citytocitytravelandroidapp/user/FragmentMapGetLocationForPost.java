@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.FragmentInteractionListenerInterface;
 import com.itempire.citytocitytravelandroidapp.R;
 
 import java.util.List;
@@ -70,6 +71,8 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
 
     private String cityName;
 
+    private FragmentInteractionListenerInterface mListener;
+
     public FragmentMapGetLocationForPost() {
         // Required empty public constructor
         mLocationRequest = new LocationRequest();
@@ -81,7 +84,8 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = container.getContext();
-
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_SELECT_LOCATION);
         // Inflate the layout for this fragment
         if (view == null) {
 
@@ -261,6 +265,29 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
             Log.e("@ErrinInAAddress", "My Current loction address Canont get Address!");
         }
         return strAdd;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentInteractionListenerInterface) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement FragmentInteractionListenerInterface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_SELECT_LOCATION);
     }
 
 }

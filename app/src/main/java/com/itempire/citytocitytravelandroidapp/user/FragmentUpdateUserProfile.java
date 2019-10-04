@@ -1,6 +1,7 @@
 package com.itempire.citytocitytravelandroidapp.user;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +33,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
 import com.itempire.citytocitytravelandroidapp.CommonFeaturesClass;
 import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.FragmentInteractionListenerInterface;
 import com.itempire.citytocitytravelandroidapp.R;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
@@ -73,6 +75,8 @@ public class FragmentUpdateUserProfile extends Fragment {
     private FirebaseUser user;
     private User oldUser;
 
+    private FragmentInteractionListenerInterface mListener;
+
     public FragmentUpdateUserProfile() {
         // Required empty public constructor
     }
@@ -84,6 +88,8 @@ public class FragmentUpdateUserProfile extends Fragment {
         context = container.getContext();
         bundleArgument = getArguments();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_EDIT_PROFILE);
         // Inflate the layout for this fragment
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_update_user_profile, container, false);
@@ -320,6 +326,29 @@ public class FragmentUpdateUserProfile extends Fragment {
         progressDialog.setTitle("Uploading...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentInteractionListenerInterface) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement FragmentInteractionListenerInterface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_EDIT_PROFILE);
     }
 
 }

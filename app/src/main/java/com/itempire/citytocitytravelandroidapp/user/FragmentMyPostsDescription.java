@@ -1,6 +1,7 @@
 package com.itempire.citytocitytravelandroidapp.user;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.Image;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.itempire.citytocitytravelandroidapp.CommonFeaturesClass;
 import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.FragmentInteractionListenerInterface;
 import com.itempire.citytocitytravelandroidapp.R;
 import com.itempire.citytocitytravelandroidapp.adapters.AdapterAllPosts;
 import com.itempire.citytocitytravelandroidapp.adapters.AdapterMyOffersRequests;
@@ -60,6 +62,8 @@ public class FragmentMyPostsDescription extends Fragment {
     private static ValueEventListener valueEventListener;
     private DatabaseReference postOfferDBRef;
 
+    private FragmentInteractionListenerInterface mListener;
+
     public FragmentMyPostsDescription() {
         // Required empty public constructor
     }
@@ -69,6 +73,8 @@ public class FragmentMyPostsDescription extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = container.getContext();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_POST_DESCRIPTION);
         // Inflate the layout for this fragment
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_my_posts_description, container, false);
@@ -207,6 +213,30 @@ public class FragmentMyPostsDescription extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentInteractionListenerInterface) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement FragmentInteractionListenerInterface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListener != null) {
+            mListener.onFragmentInteraction(Constant.TITLE_POST_DESCRIPTION);
+        }
     }
 
 }
