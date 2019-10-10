@@ -9,146 +9,212 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:fillViewport="true">
 
-            <ImageView
-                android:id="@+id/vehicleImage"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/placeholder_photos" />
-
-            <LinearLayout
-                android:id="@+id/layout_vehicle_model"
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/vehicleImage"
-                android:orientation="horizontal">
+                android:padding="10dp">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
-                    android:text="Vehicle Model" />
+                <ImageView
+                    android:id="@+id/vehicleImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/placeholder_photos" />
 
-                <TextView
-                    android:id="@+id/vehicleModelPlace"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.7" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_vehicle_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/layout_vehicle_model"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
-                    android:text="Vehicle Number" />
-
-                <TextView
-                    android:id="@+id/vehicleNumberPlace"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.7" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_owner_detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/layout_vehicle_number"
-                android:orientation="horizontal">
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1.5dp"
+                    android:layout_below="@id/vehicleImage"
+                    android:background="@color/colorPrimaryDark" />
 
                 <LinearLayout
-                    android:id="@+id/profileImageLayout"
-                    android:layout_width="0dp"
+                    android:id="@+id/layout_vehicle_model"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_weight="0.3">
+                    android:layout_below="@id/view1"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/raleway_semi_bold"
+                        android:text="Vehicle Model"
+                        android:textColor="@color/colorText"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/vehicleModelPlace"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/style_background_white"
+                        android:fontFamily="sans-serif-medium"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorText"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_vehicle_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layout_vehicle_model"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/raleway_semi_bold"
+                        android:text="Vehicle Number"
+                        android:textColor="@color/colorText"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/vehicleNumberPlace"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/style_background_white"
+                        android:fontFamily="sans-serif-medium"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorText"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1.5dp"
+                    android:layout_below="@id/layout_vehicle_number"
+                    android:background="@color/colorPrimaryDark" />
+
+                <TextView
+                    android:id="@+id/vehicle_owner_profile"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view2"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/style_background_white"
+                    android:fontFamily="@font/raleway_semi_bold"
+                    android:text="Profile"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="17sp" />
+
+
+                <RelativeLayout
+                    android:id="@+id/layout_owner_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:layout_below="@id/vehicle_owner_profile"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/style_edit_box">
 
                     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/profileImage"
                         android:layout_width="96dp"
                         android:layout_height="96dp"
+                        android:layout_centerVertical="true"
                         android:src="@drawable/user_avatar"
                         app:civ_border_color="#FF000000"
-                        app:civ_border_width="2dp"
-                        android:layout_gravity="center"/>
+                        app:civ_border_width="2dp" />
 
-                </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/name"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:text="Owner Name" />
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="15sp"
+                        android:layout_toRightOf="@id/profileImage">
 
-                    <TextView
-                        android:id="@+id/phoneNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/name"
-                        android:padding="5dp"
-                        android:text="Owner Phone" />
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/raleway_semi_bold"
+                            android:text="Owner Name"
+                            android:textColor="@color/colorText"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/phoneNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/name"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="sans-serif-light"
+                            android:text="Owner Phone"
+                            android:textColor="@color/colorText"
+                            android:textSize="17sp" />
+
+                    </RelativeLayout>
 
                 </RelativeLayout>
 
-            </LinearLayout>
+                <Button
+                    android:id="@+id/btnActiveInActiveVehicle"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layout_owner_detail"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/style_button_solid"
+                    android:fontFamily="@font/ralewaylight"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="15sp" />
 
-
-            <Button
-                android:id="@+id/btnActiveInActiveVehicle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/layout_owner_detail"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true" />
-
-
-        </RelativeLayout>
-
-
+            </RelativeLayout>
+    </ScrollView>
         <LinearLayout
             android:id="@+id/layout_call_sms_vehicle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:layout_margin="5dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/send_sms_to_owner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2.5dp"
                 android:layout_weight="0.5"
-                android:text="SMS" />
+                android:background="@drawable/style_button_solid"
+                android:fontFamily="@font/ralewaylight"
+                android:text="SMS"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/call_to_owner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="2.5dp"
                 android:layout_weight="0.5"
-                android:text="Call" />
+                android:background="@drawable/style_button_solid"
+                android:fontFamily="@font/ralewaylight"
+                android:text="Call"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -157,18 +223,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:layout_margin="5dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/btnRemoveVehicle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Remove"/>
+                android:layout_height="45dp"
+                android:layout_marginLeft="2.5dp"
+                android:background="@drawable/style_button_lining"
+                android:fontFamily="@font/raleway_semi_bold"
+                android:text="Remove"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="17sp" />
 
         </LinearLayout>
 
-
     </RelativeLayout>
+
 
 </FrameLayout>

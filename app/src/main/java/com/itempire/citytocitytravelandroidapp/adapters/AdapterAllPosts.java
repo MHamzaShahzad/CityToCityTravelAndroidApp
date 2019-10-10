@@ -56,7 +56,6 @@ public class AdapterAllPosts extends RecyclerView.Adapter<AdapterAllPosts.Holder
 
         CommonFeaturesClass.loadPostImage(holder.image_post_recycler, post);
 
-
         holder.post_data.setText(
                 post.getOwnerVehicleId() + "\n" +
                         post.getTotalNoOfSeatsAvailable() + "\n" +

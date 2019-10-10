@@ -49,7 +49,6 @@ public class AdapterMyRequests extends RecyclerView.Adapter<AdapterMyRequests.Ho
     public void onBindViewHolder(@NonNull final AdapterMyRequests.Holder holder, int position) {
 
         AvailOffer offer = list.get(position);
-
         holder.text_offers_data.setText(
                 offer.getMessage() + "\n" +
                         offer.getNumberOfSeats()

@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Sign In With Phone Number"/>
+    android:layout_height="match_parent"
+    android:background="@drawable/car7">
 
     <TextView
         android:id="@+id/btn_login_phone"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@drawable/style_button_lining"
+        android:textAlignment="center"
+        android:fontFamily="@font/raleway_semi_bold"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:layout_above="@id/text_1"
+        android:layout_margin="10dp"
+        android:textColor="#448001"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="SignIn"/>
+    <TextView
+        android:id="@+id/text_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ralewaylight"
+        android:textSize="15sp"
+        android:textColor="@color/colorWhite"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:layout_centerHorizontal="true"
+        android:text="SignIn With Phone Number"/>
+
 </RelativeLayout>

@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/userProfileImage"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
             android:src="@drawable/user_avatar" />
@@ -26,8 +26,10 @@
             android:layout_below="@id/userProfileImage"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
+            android:fontFamily="@font/raleway_semi_bold"
             android:textStyle="bold"
-            android:textSize="22sp"
+            android:textColor="@color/colorText"
+            android:textSize="20sp"
             android:text="User Name"/>
 
         <TextView
@@ -35,9 +37,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/userName"
-            android:layout_margin="10dp"
-            android:textSize="20sp"
+            android:layout_below="@id/userPhoneNumber"
+            android:textSize="17sp"
+            android:textColor="@color/colorText"
+            android:fontFamily="@font/ralewaylight"
             android:text="Address"/>
 
         <TextView
@@ -45,16 +48,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/userAddress"
-            android:layout_margin="10dp"
-            android:textSize="20sp"
-            android:textStyle="italic"
+            android:layout_below="@id/userName"
+            android:textSize="17sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/colorText"
             android:text="+923001234567"/>
 
         <Button
             android:id="@+id/btnEditMyProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/style_button_solid"
+            android:textColor="@color/colorWhite"
+            android:textAllCaps="false"
+            android:textSize="17sp"
+            android:fontFamily="@font/ralewaylight"
             android:layout_alignParentBottom="true"
             android:text="Edit Profile"/>
 

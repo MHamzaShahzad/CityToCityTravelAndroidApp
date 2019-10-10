@@ -68,7 +68,7 @@ public class AdapterMyOffersRequests extends RecyclerView.Adapter<AdapterMyOffer
                         CommonFeaturesClass.getMyPostsOfferRequestsStatus(offer.getOfferStatus())
         );
 
-        if (offer.getOfferStatus().equals(Constant.POST_ACTIVE_STATUS)){
+        if (offer.getOfferStatus().equals(Constant.POST_ACTIVE_STATUS)) {
             holder.layout_accept_reject_request.setVisibility(View.VISIBLE);
         }
 
@@ -178,7 +178,7 @@ public class AdapterMyOffersRequests extends RecyclerView.Adapter<AdapterMyOffer
                     MyFirebaseDatabaseClass.POSTS_REFERENCE.child(offer.getPostId()).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            if (remainingSeats == 0){
+                            if (remainingSeats == 0) {
                                 expireOtherRequests(offer.getPostId());
                             }
                         }
@@ -196,19 +196,19 @@ public class AdapterMyOffersRequests extends RecyclerView.Adapter<AdapterMyOffer
         });
     }
 
-    private void expireOtherRequests(String postId){
+    private void expireOtherRequests(String postId) {
         MyFirebaseDatabaseClass.POSTS_OFFERS_REFERENCE.child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null){
+                if (dataSnapshot.getValue() != null) {
                     Iterable<DataSnapshot> snapshotIterable = dataSnapshot.getChildren();
-                    for (DataSnapshot snapshot : snapshotIterable){
+                    for (DataSnapshot snapshot : snapshotIterable) {
                         try {
                             AvailOffer offer = snapshot.getValue(AvailOffer.class);
-                            if (offer != null && offer.getOfferStatus().equals(Constant.OFFER_PENDING_STATUS)){
+                            if (offer != null && offer.getOfferStatus().equals(Constant.OFFER_PENDING_STATUS)) {
                                 snapshot.getRef().child("offerStatus").setValue(Constant.OFFER_EXPIRED_STATUS);
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

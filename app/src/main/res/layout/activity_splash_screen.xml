@@ -3,13 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashScreen">
+    tools:context=".SplashScreen"
+    android:background="@drawable/car4">
 
     <TextView
         android:id="@+id/text_welcome_splash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:fontFamily="@font/raleway_semi_bold"
+        android:textSize="18sp"
+        android:textColor="@color/colorWhite"
         android:text="@string/welcome_to_our_app"
         />
 
@@ -18,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
-        android:indeterminateTint="@color/colorPrimary"
+        android:indeterminateTint="@color/colorWhite"
         android:layout_below="@+id/text_welcome_splash"/>
 
     <TextView
@@ -27,6 +31,9 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
+        android:fontFamily="@font/raleway_semi_bold"
+        android:textSize="18sp"
+        android:textColor="@color/colorWhite"
         android:text="@string/loading"/>
 
 </RelativeLayout>

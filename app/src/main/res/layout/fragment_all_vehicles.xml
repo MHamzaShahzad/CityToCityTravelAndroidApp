@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".admin.FragmentAllVehicles">
 
     <RelativeLayout
@@ -13,7 +14,9 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#7367"
+            app:tabTextColor="@color/colorWhite"
+            app:tabSelectedTextColor="#496F1B"
+            android:background="#8BC34A"
             >
 
             <com.google.android.material.tabs.TabItem

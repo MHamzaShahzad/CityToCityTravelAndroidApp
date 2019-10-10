@@ -8,6 +8,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/style_edit_box"
+        android:layout_margin="5dp"
         android:padding="10dp">
 
         <ImageView
@@ -17,25 +19,39 @@
             android:layout_marginBottom="10dp"
             android:src="@drawable/placeholder_photos" />
 
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="@color/colorPrimaryDark"
+            android:layout_below="@id/vehicleImage" />
 
         <LinearLayout
             android:id="@+id/layout_vehicle_model"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/vehicleImage"
-            android:orientation="horizontal">
+            android:layout_below="@id/view1"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
+                android:layout_weight="0.5"
+                android:textColor="@color/colorText"
+                android:fontFamily="@font/raleway_semi_bold"
+                android:textSize="17sp"
                 android:text="Vehicle Model" />
 
             <TextView
                 android:id="@+id/vehicleModelPlace"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.7" />
+                android:layout_weight="0.5"
+                android:textSize="17sp"
+                android:textColor="@color/colorText"
+                android:textAlignment="center"
+                android:fontFamily="sans-serif-medium"/>
 
 
         </LinearLayout>
@@ -44,20 +60,29 @@
             android:id="@+id/layout_vehicle_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
             android:layout_below="@id/layout_vehicle_model"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
+                android:layout_weight="0.5"
+                android:textColor="@color/colorText"
+                android:fontFamily="@font/raleway_semi_bold"
+                android:textSize="17sp"
                 android:text="Vehicle Number" />
 
             <TextView
                 android:id="@+id/vehicleNumberPlace"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.7" />
+                android:layout_weight="0.5"
+                android:textSize="17sp"
+                android:textColor="@color/colorText"
+                android:textAlignment="center"
+                android:fontFamily="sans-serif-medium"/>
 
         </LinearLayout>
 

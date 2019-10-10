@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".user.FragmentUpdateUserProfile">
+    tools:context=".user.FragmentUpdateUserProfile"
+    android:background="@drawable/car4">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,12 +23,17 @@
                 android:layout_gravity="center"
                 android:layout_width="126dp"
                 android:layout_height="126dp"
-                android:src="@drawable/circle_image_avatar"
+                android:src="@drawable/profile"
                 app:civ_border_color="#FF000000"
                 app:civ_border_width="2dp" />
 
             <EditText
                 android:id="@+id/userName"
+                android:background="@drawable/style_button_lining"
+                android:fontFamily="@font/ralewaylight"
+                android:textSize="16sp"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/colorText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter your name" />
@@ -36,19 +42,27 @@
                 android:id="@+id/userAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Address" />
+                android:hint="Address"
+                android:background="@drawable/style_button_lining"
+                android:fontFamily="@font/ralewaylight"
+                android:textSize="16sp"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/colorText" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:text="Gender"
-                    android:textSize="17sp" />
+                    android:textColor="@color/colorWhite"
+                    android:fontFamily="@font/raleway_semi_bold"
+                    android:textSize="15sp" />
 
                 <RadioGroup
                     android:id="@+id/radioGroupGender"
@@ -61,6 +75,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="Male"
+                        android:fontFamily="@font/raleway_semi_bold"
+                        android:textSize="12sp"
+                        android:textColorHint="@color/colorWhite"
                         android:padding="10dp" />
 
                     <RadioButton
@@ -68,6 +85,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="Female"
+                        android:fontFamily="@font/raleway_semi_bold"
+                        android:textSize="12sp"
+                        android:textColorHint="@color/colorWhite"
                         android:padding="10dp" />
 
                     <RadioButton
@@ -75,6 +95,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="Others"
+                        android:fontFamily="@font/raleway_semi_bold"
+                        android:textSize="12sp"
+                        android:textColorHint="@color/colorWhite"
                         android:padding="10dp" />
 
                 </RadioGroup>
@@ -82,10 +105,16 @@
 
             <Button
                 android:id="@+id/btnUpdateUser"
-                android:layout_width="wrap_content"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Update" />
+                android:text="Submit"
+                android:background="@drawable/style_button_solid"
+                android:textColor="@color/colorWhite"
+                android:textAllCaps="false"
+                android:textSize="17sp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/raleway_semi_bold" />
 
         </LinearLayout>
 

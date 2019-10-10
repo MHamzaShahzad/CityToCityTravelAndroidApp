@@ -11,6 +11,8 @@
         android:layout_centerInParent="true"
         android:text="@string/no_data_found"
         android:textSize="30sp"
+        android:fontFamily="@font/raleway_semi_bold"
+        android:textColor="@color/colorText"
         android:visibility="gone"
         />
 
