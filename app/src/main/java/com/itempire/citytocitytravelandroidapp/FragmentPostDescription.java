@@ -1,6 +1,7 @@
 package com.itempire.citytocitytravelandroidapp;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -45,6 +46,8 @@ public class FragmentPostDescription extends Fragment {
     TextView detail_post_description;
     Button btn_avail_offer, send_sms_to_owner, call_to_owner;
 
+    private FragmentInteractionListenerInterface mListener;
+
     public FragmentPostDescription() {
         // Required empty public constructor
     }
@@ -53,6 +56,8 @@ public class FragmentPostDescription extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = container.getContext();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_POST_DESCRIPTION);
         // Inflate the layout for this fragment
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_post_description, container, false);
@@ -183,6 +188,29 @@ public class FragmentPostDescription extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentInteractionListenerInterface) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement FragmentInteractionListenerInterface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_POST_DESCRIPTION);
     }
 
 }

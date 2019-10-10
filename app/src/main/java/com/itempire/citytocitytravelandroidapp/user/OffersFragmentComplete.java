@@ -1,6 +1,7 @@
 package com.itempire.citytocitytravelandroidapp.user;
 
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.FragmentInteractionListenerInterface;
 import com.itempire.citytocitytravelandroidapp.R;
 import com.itempire.citytocitytravelandroidapp.adapters.AdapterMyRequests;
 import com.itempire.citytocitytravelandroidapp.adapters.AdapterCategoriesList;
@@ -50,6 +52,8 @@ public class OffersFragmentComplete extends Fragment {
     static ValueEventListener valueEventListener;
     DatabaseReference postOfferDBRef;
 
+    private FragmentInteractionListenerInterface mListener;
+
     public OffersFragmentComplete(Context context) {
         // Required empty public constructor
         this.context = context;
@@ -76,6 +80,8 @@ public class OffersFragmentComplete extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_MY_REQUESTS);
         // Inflate the layout for this fragment
         if (view == null) {
 
@@ -179,4 +185,28 @@ public class OffersFragmentComplete extends Fragment {
         if (receiverSelectedCategory != null)
             context.unregisterReceiver(receiverSelectedCategory);
     }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentInteractionListenerInterface) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement FragmentInteractionListenerInterface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_MY_REQUESTS);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.itempire.citytocitytravelandroidapp.user;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
@@ -33,6 +34,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.UploadTask;
 import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.FragmentInteractionListenerInterface;
 import com.itempire.citytocitytravelandroidapp.MainActivity;
 import com.itempire.citytocitytravelandroidapp.R;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
@@ -74,6 +76,8 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
     private static BroadcastReceiver broadcastReceiver;
     private String deptLatitude, deptLongitude, arrivalLatitude, arrivalLongitude;
 
+    private FragmentInteractionListenerInterface mListener;
+
     public FragmentCreatePost() {
         // Required empty public constructor
     }
@@ -82,7 +86,8 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = container.getContext();
-
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_CREATE_POST);
         // Inflate the layout for this fragment
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_create_post, container, false);
@@ -419,6 +424,29 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
 
         if (broadcastReceiver != null)
             context.unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentInteractionListenerInterface) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement FragmentInteractionListenerInterface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_CREATE_POST);
     }
 
 }

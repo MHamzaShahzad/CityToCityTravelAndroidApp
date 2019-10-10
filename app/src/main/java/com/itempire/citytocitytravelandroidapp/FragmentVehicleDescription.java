@@ -1,6 +1,7 @@
 package com.itempire.citytocitytravelandroidapp;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -58,6 +59,8 @@ public class FragmentVehicleDescription extends Fragment implements View.OnClick
     private static final String VEHICLE_BUTTON_TEXT_ACTIVE = "Active";
     private static final String VEHICLE_BUTTON_TEXT_INACTIVE = "In-Active";
 
+    private FragmentInteractionListenerInterface mListener;
+
     public FragmentVehicleDescription() {
         // Required empty public constructor
     }
@@ -67,6 +70,8 @@ public class FragmentVehicleDescription extends Fragment implements View.OnClick
                              Bundle savedInstanceState) {
         context = container.getContext();
         bundleArgument = getArguments();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_VEHICLE_DESCRIPTION);
         // Inflate the layout for this fragment
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_vehicle_description, container, false);
@@ -412,6 +417,29 @@ public class FragmentVehicleDescription extends Fragment implements View.OnClick
 
             }
         });
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentInteractionListenerInterface) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement FragmentInteractionListenerInterface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_VEHICLE_DESCRIPTION);
     }
 
 }

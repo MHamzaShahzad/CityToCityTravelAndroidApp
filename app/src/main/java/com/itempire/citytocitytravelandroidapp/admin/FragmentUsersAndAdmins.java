@@ -1,6 +1,7 @@
 package com.itempire.citytocitytravelandroidapp.admin;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.itempire.citytocitytravelandroidapp.Constant;
+import com.itempire.citytocitytravelandroidapp.FragmentInteractionListenerInterface;
 import com.itempire.citytocitytravelandroidapp.R;
 import com.itempire.citytocitytravelandroidapp.adapters.AdapterUsersAndAdmins;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
@@ -43,6 +45,7 @@ public class FragmentUsersAndAdmins extends Fragment {
     List<User> list, tempList;
     ValueEventListener valueEventListener;
 
+    private FragmentInteractionListenerInterface mListener;
 
     public FragmentUsersAndAdmins() {
         // Required empty public constructor
@@ -56,6 +59,9 @@ public class FragmentUsersAndAdmins extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         context = container.getContext();
+        if (mListener != null)
+            mListener.onFragmentInteraction(Constant.TITLE_USERS_AND_ADMINS);
+
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_users_and_admins, container, false);
 
@@ -115,7 +121,7 @@ public class FragmentUsersAndAdmins extends Fragment {
                         User user = singleUser.getValue(User.class);
                         if (user != null) {
                             list.add(user);
-                            Log.e(TAG, "onDataChange: "+ user.getUserName() );
+                            Log.e(TAG, "onDataChange: " + user.getUserName());
                         }
 
                     } catch (Exception e) {
@@ -134,11 +140,11 @@ public class FragmentUsersAndAdmins extends Fragment {
         MyFirebaseDatabaseClass.USERS_PROFILE_REFERENCE.addValueEventListener(valueEventListener);
     }
 
-    private void initTabsLayout(){
-        if (tabLayout.getSelectedTabPosition() == 0){
+    private void initTabsLayout() {
+        if (tabLayout.getSelectedTabPosition() == 0) {
             getUsers();
         }
-        if (tabLayout.getSelectedTabPosition() == 1){
+        if (tabLayout.getSelectedTabPosition() == 1) {
             getAdmins();
         }
     }
@@ -177,6 +183,30 @@ public class FragmentUsersAndAdmins extends Fragment {
         super.onDestroy();
         if (valueEventListener != null)
             MyFirebaseDatabaseClass.USERS_PROFILE_REFERENCE.removeEventListener(valueEventListener);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentInteractionListenerInterface) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement FragmentInteractionListenerInterface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListener != null) {
+            mListener.onFragmentInteraction(Constant.TITLE_USERS_AND_ADMINS);
+        }
     }
 
 }

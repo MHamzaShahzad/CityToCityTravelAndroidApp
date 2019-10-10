@@ -44,4 +44,19 @@ public class Constant {
     public static final String DEPT_LOCATION_KEY = "getDeptLocationForPost";
     public static final String ARRIVAL_LOCATION_KEY = "getArrivalLocationForPost";
 
+
+    public static final String TITLE_HOME = "Home";
+    public static final String TITLE_USERS_AND_ADMINS = "Users and Admins";
+    public static final String TITLE_VEHICLES_LIST = "Vehicles List";
+    public static final String TITLE_MY_REQUESTS = "My Requests";
+    public static final String TITLE_MY_POSTS = "My Posts";
+    public static final String TITLE_VEHICLE_DESCRIPTION = "Vehicle Description";
+    public static final String TITLE_UPLOAD_VEHICLE = "Upload Vehicle";
+    public static final String TITLE_PROFILE = "Profile";
+    public static final String TITLE_EDIT_PROFILE = "Edit Profile";
+    public static final String TITLE_CREATE_POST = "Create Post";
+    public static final String TITLE_SELECT_LOCATION = "Select Location";
+    public static final String TITLE_POST_DESCRIPTION = "Description";
+    public static final String TITLE_REQUEST_POST_DESCRIPTION = "Request Description";
+
 }
