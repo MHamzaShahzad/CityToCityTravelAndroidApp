@@ -13,7 +13,6 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
 import com.itempire.citytocitytravelandroidapp.models.Post;
 import com.itempire.citytocitytravelandroidapp.models.Vehicle;

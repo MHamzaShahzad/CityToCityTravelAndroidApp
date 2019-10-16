@@ -32,7 +32,6 @@
             android:layout_marginTop="10dp"
             android:layout_below="@id/horizontal_scroll_offers_list"/>
 
-
     </RelativeLayout>
 
 </FrameLayout>

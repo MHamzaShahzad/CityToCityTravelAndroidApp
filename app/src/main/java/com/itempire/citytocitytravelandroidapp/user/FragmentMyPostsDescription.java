@@ -43,8 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 
 
-
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -56,9 +54,13 @@ public class FragmentMyPostsDescription extends Fragment {
     Context context;
 
     ImageView image_my_post_description;
-    TextView detail_my_post_description;
+
+    TextView place_numberOfRequests, place_my_post_desc_post_time, place_my_post_departure_date, place_my_post_departure_time,
+            place_my_post_departure_city, place_my_post_departure_location, place_my_post_arrival_city, place_my_post_arrival_location,
+            place_my_post_totalNoOfSeatsAvailable, place_my_post_maximumNoOfSeatsAvailable, place_my_post_minimumNoOfSeatsAvailable;
+
     RecyclerView recycler_offer_requests_for_my_post;
-    Button btnCompletePost;
+    Button btnCompletePost, btn_view_on_map;
     private static ValueEventListener valueEventListener;
     private DatabaseReference postOfferDBRef;
 
@@ -80,14 +82,25 @@ public class FragmentMyPostsDescription extends Fragment {
             view = inflater.inflate(R.layout.fragment_my_posts_description, container, false);
 
             image_my_post_description = (ImageView) view.findViewById(R.id.image_my_post_description);
-            detail_my_post_description = (TextView) view.findViewById(R.id.detail_my_post_description);
+
+            place_numberOfRequests = (TextView) view.findViewById(R.id.place_numberOfRequests);
+            place_my_post_desc_post_time = (TextView) view.findViewById(R.id.place_my_post_desc_post_time);
+            place_my_post_departure_date = (TextView) view.findViewById(R.id.place_my_post_departure_date);
+            place_my_post_departure_time = (TextView) view.findViewById(R.id.place_my_post_departure_time);
+            place_my_post_departure_city = (TextView) view.findViewById(R.id.place_my_post_departure_city);
+            place_my_post_departure_location = (TextView) view.findViewById(R.id.place_my_post_departure_location);
+            place_my_post_arrival_city = (TextView) view.findViewById(R.id.place_my_post_arrival_city);
+            place_my_post_arrival_location = (TextView) view.findViewById(R.id.place_my_post_arrival_location);
+            place_my_post_totalNoOfSeatsAvailable = (TextView) view.findViewById(R.id.place_my_post_totalNoOfSeatsAvailable);
+            place_my_post_maximumNoOfSeatsAvailable = (TextView) view.findViewById(R.id.place_my_post_maximumNoOfSeatsAvailable);
+            place_my_post_minimumNoOfSeatsAvailable = (TextView) view.findViewById(R.id.place_my_post_minimumNoOfSeatsAvailable);
+
             btnCompletePost = (Button) view.findViewById(R.id.btnCompletePost);
+            btn_view_on_map = (Button) view.findViewById(R.id.btn_view_on_map);
 
             recycler_offer_requests_for_my_post = (RecyclerView) view.findViewById(R.id.recycler_offer_requests_for_my_post);
             recycler_offer_requests_for_my_post.setHasFixedSize(true);
             recycler_offer_requests_for_my_post.setLayoutManager(new LinearLayoutManager(context));
-
-            view.findViewById(R.id.text_no_data_found).setVisibility(View.GONE);
 
 
             final Post post = (Post) (getArguments() != null ? getArguments().getSerializable(Constant.POST_OBJECT_DESCRIPTION) : null);
@@ -95,9 +108,24 @@ public class FragmentMyPostsDescription extends Fragment {
 
                 CommonFeaturesClass.loadPostImage(image_my_post_description, post);
 
-                postOfferDBRef =  MyFirebaseDatabaseClass.POSTS_OFFERS_REFERENCE.child(post.getPostId());
+                postOfferDBRef = MyFirebaseDatabaseClass.POSTS_OFFERS_REFERENCE.child(post.getPostId());
 
-                if (post.getPostStatus().equals(Constant.POST_ACTIVE_STATUS)){
+                place_my_post_desc_post_time.setText(post.getPostTime());
+
+                place_my_post_departure_date.setText(post.getDepartureDate());
+                place_my_post_departure_time.setText(post.getDepartureTime());
+                place_my_post_departure_city.setText(post.getDepartureCity());
+                place_my_post_departure_location.setText(post.getDepartureLocation());
+
+                place_my_post_arrival_city.setText(post.getArrivalCity());
+                place_my_post_arrival_location.setText(post.getArrivalLocation());
+
+                place_my_post_totalNoOfSeatsAvailable.setText(post.getTotalNoOfSeatsAvailable());
+                place_my_post_maximumNoOfSeatsAvailable.setText(post.getMaximumNoOfSeatsAvailable());
+                place_my_post_minimumNoOfSeatsAvailable.setText(post.getMinimumNoOfSeatsAvailable());
+
+
+                if (post.getPostStatus().equals(Constant.POST_ACTIVE_STATUS)) {
                     btnCompletePost.setVisibility(View.VISIBLE);
                     btnCompletePost.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -106,6 +134,18 @@ public class FragmentMyPostsDescription extends Fragment {
                         }
                     });
                 }
+
+                btn_view_on_map.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        FragmentMapGetLocationForPost mapGetLocationForPost = new FragmentMapGetLocationForPost();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(Constant.POST_OBJECT_DESCRIPTION, post);
+                        bundle.putBoolean(Constant.VIEW_ON_MAP, true);
+                        mapGetLocationForPost.setArguments(bundle);
+                        ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, mapGetLocationForPost).addToBackStack(null).commit();
+                    }
+                });
 
                 setValueEventListener(post);
 
@@ -139,6 +179,7 @@ public class FragmentMyPostsDescription extends Fragment {
                                     offer.getOfferStatus()
                             );
 
+
                             list.add(
                                     offer
                             );
@@ -148,12 +189,15 @@ public class FragmentMyPostsDescription extends Fragment {
                             Log.e(TAG, "onDataChange: NO_POST_EXIST");
                         }
 
-                        recycler_offer_requests_for_my_post.setAdapter(new AdapterMyOffersRequests(context, list, post));
-                        if (list.size() == 0) {
-                            view.findViewById(R.id.text_no_data_found).setVisibility(View.VISIBLE);
-                        }
-                    }catch (Exception e){e.printStackTrace();}
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+
+                recycler_offer_requests_for_my_post.setAdapter(new AdapterMyOffersRequests(context, list, post));
+                place_numberOfRequests.setText(String.valueOf(list.size()));
+
             }
 
             @Override
@@ -175,35 +219,35 @@ public class FragmentMyPostsDescription extends Fragment {
             postOfferDBRef.removeEventListener(valueEventListener);
     }
 
-    private void completeMyPost(final Post post){
+    private void completeMyPost(final Post post) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("postStatus", Constant.POST_COMPLETED_STATUS);
         MyFirebaseDatabaseClass.POSTS_REFERENCE.child(post.getPostId()).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                    expireOtherRequests(post.getPostId());
+                expireOtherRequests(post.getPostId());
             }
         });
     }
 
-    private void expireOtherRequests(String postId){
+    private void expireOtherRequests(String postId) {
         MyFirebaseDatabaseClass.POSTS_OFFERS_REFERENCE.child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null){
+                if (dataSnapshot.getValue() != null) {
                     Iterable<DataSnapshot> snapshotIterable = dataSnapshot.getChildren();
-                    for (DataSnapshot snapshot : snapshotIterable){
+                    for (DataSnapshot snapshot : snapshotIterable) {
                         try {
                             AvailOffer offer = snapshot.getValue(AvailOffer.class);
-                            if (offer != null && offer.getOfferStatus().equals(Constant.OFFER_PENDING_STATUS)){
+                            if (offer != null && offer.getOfferStatus().equals(Constant.OFFER_PENDING_STATUS)) {
                                 snapshot.getRef().child("offerStatus").setValue(Constant.OFFER_EXPIRED_STATUS);
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                     ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
-                }else {
+                } else {
                     ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
                 }
             }

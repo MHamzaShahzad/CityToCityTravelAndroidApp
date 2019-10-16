@@ -131,7 +131,6 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
 
     }
 
-
     private void getViewsByIds() {
 
         image_view_dept_date_calender = view.findViewById(R.id.image_view_dept_date_calender);
@@ -351,7 +350,6 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                //TODO Auto-generated method stub
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);

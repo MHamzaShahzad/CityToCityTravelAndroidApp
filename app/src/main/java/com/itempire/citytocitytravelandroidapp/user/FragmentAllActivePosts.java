@@ -37,6 +37,8 @@ public class FragmentAllActivePosts extends Fragment {
     View view;
     RecyclerView recycler_all_posts;
     ValueEventListener valueEventListener;
+    List<Post> postsList;
+    AdapterAllPosts adapterAllPosts;
 
     private FragmentInteractionListenerInterface mListener;
 
@@ -56,10 +58,13 @@ public class FragmentAllActivePosts extends Fragment {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_all_active_posts, container, false);
 
+            postsList = new ArrayList<>();
+            adapterAllPosts = new AdapterAllPosts(context, postsList);
+
             recycler_all_posts = (RecyclerView) view.findViewById(R.id.recycler_all_posts);
             recycler_all_posts.setHasFixedSize(true);
-            recycler_all_posts.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, true));
-
+            recycler_all_posts.setLayoutManager(new LinearLayoutManager(context));
+            recycler_all_posts.setAdapter(adapterAllPosts);
 
             initValueEventListener();
 
@@ -73,7 +78,7 @@ public class FragmentAllActivePosts extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                List<Post> postsList = new ArrayList<>();
+               postsList.clear();
 
                 Iterable<DataSnapshot> childrenList = dataSnapshot.getChildren();
                 for (DataSnapshot child : childrenList) {
@@ -86,7 +91,7 @@ public class FragmentAllActivePosts extends Fragment {
                     }
 
                 }
-                recycler_all_posts.setAdapter(new AdapterAllPosts(context, postsList));
+                adapterAllPosts.notifyDataSetChanged();
 
             }
 
@@ -98,7 +103,6 @@ public class FragmentAllActivePosts extends Fragment {
         MyFirebaseDatabaseClass.POSTS_REFERENCE.addValueEventListener(valueEventListener);
 
     }
-
 
     @Override
     public void onDestroy() {
@@ -133,4 +137,5 @@ public class FragmentAllActivePosts extends Fragment {
         if (mListener != null)
             mListener.onFragmentInteraction(Constant.TITLE_HOME);
     }
+
 }

@@ -24,6 +24,7 @@ import com.itempire.citytocitytravelandroidapp.admin.FragmentUsersAndAdmins;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyPrefLocalStorage;
+import com.itempire.citytocitytravelandroidapp.models.Post;
 import com.itempire.citytocitytravelandroidapp.models.User;
 import com.itempire.citytocitytravelandroidapp.models.Vehicle;
 import com.itempire.citytocitytravelandroidapp.user.FragmentAllActivePosts;
@@ -44,7 +45,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainDrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, FragmentInteractionListenerInterface{
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentInteractionListenerInterface {
 
     private static final String TAG = MainDrawerActivity.class.getName();
 
@@ -138,7 +139,7 @@ public class MainDrawerActivity extends AppCompatActivity
         if (id == R.id.action_users_admins) {
             getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentUsersAndAdmins()).addToBackStack(null).commit();
             return true;
-        }else if (id == R.id.action_vehicles) {
+        } else if (id == R.id.action_vehicles) {
             getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentAllVehicles()).addToBackStack(null).commit();
             return true;
         }
@@ -169,10 +170,10 @@ public class MainDrawerActivity extends AppCompatActivity
             MyFirebaseDatabaseClass.VEHICLES_REFERENCE.child(MyFirebaseCurrentUserClass.mUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null){
-                        try{
+                    if (dataSnapshot.getValue() != null) {
+                        try {
                             Vehicle vehicle = dataSnapshot.getValue(Vehicle.class);
-                            if (vehicle != null){
+                            if (vehicle != null) {
                                 FragmentVehicleDescription fragmentVehicleDescription = new FragmentVehicleDescription();
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable(Constant.VEHICLE_DESCRIPTION_NAME, vehicle);
@@ -181,7 +182,7 @@ public class MainDrawerActivity extends AppCompatActivity
                                 getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, fragmentVehicleDescription).addToBackStack(null).commit();
 
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -211,8 +212,7 @@ public class MainDrawerActivity extends AppCompatActivity
     }
 
 
-
-    private void initHeaderWidgets(View view){
+    private void initHeaderWidgets(View view) {
         if (view != null) {
             userNavHeaderImage = view.findViewById(R.id.headerImageView);
             userNavHeaderName = view.findViewById(R.id.headerUserName);
@@ -228,8 +228,8 @@ public class MainDrawerActivity extends AppCompatActivity
         }
     }
 
-    public static void updateUserInNavHeader(User user){
-        if (user != null){
+    public static void updateUserInNavHeader(User user) {
+        if (user != null) {
             if (user.getUserImageUrl() != null)
                 try {
                     Picasso.get().load(user.getUserImageUrl()).placeholder(R.drawable.user_avatar).fit().into(userNavHeaderImage);
@@ -252,7 +252,7 @@ public class MainDrawerActivity extends AppCompatActivity
                         Vehicle vehicle = dataSnapshot.getValue(Vehicle.class);
                         if (vehicle != null) {
                             if (vehicle.getVehicleStatus().equals(Constant.VEHICLE_STATUS_ACTIVE))
-                                getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentCreatePost()).addToBackStack(null).commit();
+                                checkIfAlreadyHaveAnActivePost();
                             else
                                 CommonFeaturesClass.showCustomDialog(context, "Vehicle Authentication", "Vehicle not registered yet, please try later.");
                         }
@@ -269,6 +269,37 @@ public class MainDrawerActivity extends AppCompatActivity
         });
 
 
+    }
+
+    private void checkIfAlreadyHaveAnActivePost() {
+        MyFirebaseDatabaseClass.POSTS_REFERENCE.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean isAlreadyExist = false;
+                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        try {
+                            Post post = snapshot.getValue(Post.class);
+                            if (post != null && post.getPostStatus().equals(Constant.POST_ACTIVE_STATUS)) {
+                                isAlreadyExist = true;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (isAlreadyExist)
+                        CommonFeaturesClass.showCustomDialog(context, "Post Alert", "You already have an active uncompleted post, complete that post and try again!");
+                    else
+                        getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentCreatePost()).addToBackStack(null).commit();
+                } else
+                    getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentCreatePost()).addToBackStack(null).commit();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void clearFragmentBackStack() {

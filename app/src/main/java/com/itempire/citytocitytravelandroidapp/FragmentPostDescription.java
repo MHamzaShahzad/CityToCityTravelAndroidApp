@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseCla
 import com.itempire.citytocitytravelandroidapp.models.AvailOffer;
 import com.itempire.citytocitytravelandroidapp.models.Post;
 import com.itempire.citytocitytravelandroidapp.models.User;
+import com.itempire.citytocitytravelandroidapp.user.FragmentMapGetLocationForPost;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -43,8 +45,10 @@ public class FragmentPostDescription extends Fragment {
     View view;
 
     ImageView image_post_description;
-    TextView detail_post_description;
-    Button btn_avail_offer, send_sms_to_owner, call_to_owner;
+    TextView place_post_desc_post_time, place_post_departure_date, place_post_departure_time, place_post_departure_city,
+            place_post_departure_location, place_post_arrival_city, place_post_arrival_location, place_post_totalNoOfSeatsAvailable,
+            place_post_maximumNoOfSeatsAvailable, place_post_minimumNoOfSeatsAvailable;
+    Button btn_avail_offer, send_sms_to_owner, call_to_owner, btn_view_on_map;
 
     private FragmentInteractionListenerInterface mListener;
 
@@ -63,8 +67,20 @@ public class FragmentPostDescription extends Fragment {
             view = inflater.inflate(R.layout.fragment_post_description, container, false);
 
             image_post_description = (ImageView) view.findViewById(R.id.image_post_description);
-            detail_post_description = (TextView) view.findViewById(R.id.detail_post_description);
+
+            place_post_desc_post_time = (TextView) view.findViewById(R.id.place_post_desc_post_time);
+            place_post_departure_date = (TextView) view.findViewById(R.id.place_post_departure_date);
+            place_post_departure_time = (TextView) view.findViewById(R.id.place_post_departure_time);
+            place_post_departure_city = (TextView) view.findViewById(R.id.place_post_departure_city);
+            place_post_departure_location = (TextView) view.findViewById(R.id.place_post_departure_location);
+            place_post_arrival_city = (TextView) view.findViewById(R.id.place_post_arrival_city);
+            place_post_arrival_location = (TextView) view.findViewById(R.id.place_post_arrival_location);
+            place_post_totalNoOfSeatsAvailable = (TextView) view.findViewById(R.id.place_post_totalNoOfSeatsAvailable);
+            place_post_maximumNoOfSeatsAvailable = (TextView) view.findViewById(R.id.place_post_maximumNoOfSeatsAvailable);
+            place_post_minimumNoOfSeatsAvailable = (TextView) view.findViewById(R.id.place_post_minimumNoOfSeatsAvailable);
+
             btn_avail_offer = (Button) view.findViewById(R.id.btn_avail_offer);
+            btn_view_on_map = (Button) view.findViewById(R.id.btn_view_on_map);
             send_sms_to_owner = view.findViewById(R.id.send_sms_to_owner);
             call_to_owner = view.findViewById(R.id.call_to_owner);
 
@@ -75,16 +91,35 @@ public class FragmentPostDescription extends Fragment {
     }
 
     private void loadData() {
-        Post post = (Post) (getArguments() != null ? getArguments().getSerializable(Constant.POST_OBJECT_DESCRIPTION) : null);
+        final Post post = (Post) (getArguments() != null ? getArguments().getSerializable(Constant.POST_OBJECT_DESCRIPTION) : null);
         if (post != null) {
             CommonFeaturesClass.loadPostImage(image_post_description, post);
-            detail_post_description.setText(
-                    post.getOwnerVehicleId() + "\n" +
-                            post.getTotalNoOfSeatsAvailable() + "\n" +
-                            post.getArrivalLocation() + "\n" +
-                            post.getDepartureCity() + "\n" +
-                            post.getDepartureLocation() + "\n"
-            );
+
+            place_post_desc_post_time.setText(post.getPostTime());
+
+            place_post_departure_date.setText(post.getDepartureDate());
+            place_post_departure_time.setText(post.getDepartureTime());
+            place_post_departure_city.setText(post.getDepartureCity());
+            place_post_departure_location.setText(post.getDepartureLocation());
+
+            place_post_arrival_city.setText(post.getArrivalCity());
+            place_post_arrival_location.setText(post.getArrivalLocation());
+
+            place_post_totalNoOfSeatsAvailable.setText(post.getTotalNoOfSeatsAvailable());
+            place_post_maximumNoOfSeatsAvailable.setText(post.getMaximumNoOfSeatsAvailable());
+            place_post_minimumNoOfSeatsAvailable.setText(post.getMinimumNoOfSeatsAvailable());
+
+            btn_view_on_map.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentMapGetLocationForPost mapGetLocationForPost = new FragmentMapGetLocationForPost();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Constant.POST_OBJECT_DESCRIPTION, post);
+                    bundle.putBoolean(Constant.VIEW_ON_MAP, true);
+                    mapGetLocationForPost.setArguments(bundle);
+                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, mapGetLocationForPost).addToBackStack(null).commit();
+                }
+            });
 
             getPostOwnerData(post.getOwnerVehicleId());
 

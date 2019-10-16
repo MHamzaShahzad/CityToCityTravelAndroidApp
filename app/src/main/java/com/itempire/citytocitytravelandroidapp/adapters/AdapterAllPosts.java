@@ -56,13 +56,11 @@ public class AdapterAllPosts extends RecyclerView.Adapter<AdapterAllPosts.Holder
 
         CommonFeaturesClass.loadPostImage(holder.image_post_recycler, post);
 
-        holder.post_data.setText(
-                post.getOwnerVehicleId() + "\n" +
-                        post.getTotalNoOfSeatsAvailable() + "\n" +
-                        post.getArrivalLocation() + "\n" +
-                        post.getDepartureCity() + "\n" +
-                        post.getDepartureLocation() + "\n"
-        );
+        holder.place_departure_date.setText( post.getDepartureTime() + "\n" +post.getDepartureDate());
+        holder.place_total_seats_available.setText(post.getTotalNoOfSeatsAvailable());
+        holder.place_post_date.setText(post.getPostTime());
+        holder.place_post_cost_per_seat.setText(post.getCostPerHead());
+
 
         holder.card_post_recycler.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,14 +84,18 @@ public class AdapterAllPosts extends RecyclerView.Adapter<AdapterAllPosts.Holder
 
         CardView card_post_recycler;
         ImageView image_post_recycler;
-        TextView post_data;
+        TextView place_post_date, place_total_seats_available, place_departure_date, place_post_cost_per_seat;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
 
             card_post_recycler = itemView.findViewById(R.id.card_post_recycler);
             image_post_recycler = itemView.findViewById(R.id.image_post_recycler);
-            post_data = itemView.findViewById(R.id.post_data);
+
+            place_post_cost_per_seat = itemView.findViewById(R.id.place_post_cost_per_seat);
+            place_post_date = itemView.findViewById(R.id.place_post_date);
+            place_total_seats_available = itemView.findViewById(R.id.place_total_seats_available);
+            place_departure_date = itemView.findViewById(R.id.place_departure_date);
         }
 
     }

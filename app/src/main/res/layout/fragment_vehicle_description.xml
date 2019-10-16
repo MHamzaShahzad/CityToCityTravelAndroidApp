@@ -12,9 +12,10 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="55dp"
             android:fillViewport="true">
 
-        <RelativeLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp">
@@ -115,7 +116,6 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="17sp" />
 
-
                 <RelativeLayout
                     android:id="@+id/layout_owner_detail"
                     android:layout_width="match_parent"
@@ -171,6 +171,7 @@
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/layout_owner_detail"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/style_button_solid"
@@ -180,7 +181,9 @@
                     android:textSize="15sp" />
 
             </RelativeLayout>
-    </ScrollView>
+
+        </ScrollView>
+
         <LinearLayout
             android:id="@+id/layout_call_sms_vehicle"
             android:layout_width="match_parent"
@@ -223,7 +226,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_margin="5dp"
             android:orientation="horizontal"
             android:visibility="gone">
 
@@ -231,7 +233,6 @@
                 android:id="@+id/btnRemoveVehicle"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:layout_marginLeft="2.5dp"
                 android:background="@drawable/style_button_lining"
                 android:fontFamily="@font/raleway_semi_bold"
                 android:text="Remove"

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -49,19 +50,14 @@ public class AdapterMyRequests extends RecyclerView.Adapter<AdapterMyRequests.Ho
     public void onBindViewHolder(@NonNull final AdapterMyRequests.Holder holder, int position) {
 
         AvailOffer offer = list.get(position);
-        holder.text_offers_data.setText(
-                offer.getMessage() + "\n" +
-                        offer.getNumberOfSeats()
-        );
 
-        holder.card_offers_list.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.place_offers_seats.setText(offer.getNumberOfSeats());
+        holder.place_offers_message.setText(offer.getMessage());
 
-                getPostFromId(list.get(holder.getAdapterPosition()).getPostId());
 
-            }
-        });
+        getPostFromId(list.get(holder.getAdapterPosition()).getPostId(), holder);
+
+
 
 
     }
@@ -74,29 +70,57 @@ public class AdapterMyRequests extends RecyclerView.Adapter<AdapterMyRequests.Ho
     public class Holder extends RecyclerView.ViewHolder {
 
         CardView card_offers_list;
-        TextView text_offers_data;
+        TextView place_offers_date, place_offers_time, place_offers_arrival_city,
+                place_offers_seats, place_offers_message;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
 
             card_offers_list = itemView.findViewById(R.id.card_offers_list);
-            text_offers_data = itemView.findViewById(R.id.text_offers_data);
+
+            place_offers_date = itemView.findViewById(R.id.place_offers_date);
+            place_offers_time = itemView.findViewById(R.id.place_offers_time);
+            place_offers_arrival_city = itemView.findViewById(R.id.place_offers_arrival_city);
+            place_offers_seats = itemView.findViewById(R.id.place_offers_seats);
+            place_offers_message = itemView.findViewById(R.id.place_offers_message);
 
         }
     }
 
-    private void getPostFromId(final String postId) {
-         MyFirebaseDatabaseClass.POSTS_REFERENCE.child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void getPostFromId(final String postId, final Holder holder) {
+        MyFirebaseDatabaseClass.POSTS_REFERENCE.child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
 
-                    FragmentRequestPostDescription postDescription = new FragmentRequestPostDescription();
-                    bundle = new Bundle();
-                    bundle.putString(Constant.OFFER_OR_POST_STATUS, selectedCat);
-                    bundle.putSerializable(Constant.POST_OBJECT_DESCRIPTION, dataSnapshot.getValue(Post.class));
-                    postDescription.setArguments(bundle);
-                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, postDescription).addToBackStack(null).commit();
+                    try {
+                        final Post post = dataSnapshot.getValue(Post.class);
+                        if (post != null) {
+
+                            holder.place_offers_arrival_city.setText(post.getArrivalCity());
+                            holder.place_offers_date.setText(post.getDepartureDate());
+                            holder.place_offers_time.setText(post.getDepartureTime());
+
+                            holder.card_offers_list.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    FragmentRequestPostDescription postDescription = new FragmentRequestPostDescription();
+                                    bundle = new Bundle();
+                                    bundle.putString(Constant.OFFER_OR_POST_STATUS, selectedCat);
+                                    bundle.putSerializable(Constant.POST_OBJECT_DESCRIPTION, post);
+                                    postDescription.setArguments(bundle);
+                                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, postDescription).addToBackStack(null).commit();
+
+                                }
+                            });
+
+                        } else
+                            Toast.makeText(context, "Something went wrong please try again!", Toast.LENGTH_SHORT).show();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
             }

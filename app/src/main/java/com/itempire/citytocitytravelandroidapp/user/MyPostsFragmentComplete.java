@@ -92,7 +92,7 @@ public class MyPostsFragmentComplete extends Fragment {
 
             my_posts_recycler = view.findViewById(R.id.my_posts_recycler);
             my_posts_recycler.setHasFixedSize(true);
-            my_posts_recycler.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, true));
+            my_posts_recycler.setLayoutManager(new LinearLayoutManager(context));
 
             postsDBRef = MyFirebaseDatabaseClass.POSTS_REFERENCE;
 

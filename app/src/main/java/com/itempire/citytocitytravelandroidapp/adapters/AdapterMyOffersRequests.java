@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,9 +29,13 @@ import com.itempire.citytocitytravelandroidapp.R;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
 import com.itempire.citytocitytravelandroidapp.models.AvailOffer;
 import com.itempire.citytocitytravelandroidapp.models.Post;
+import com.itempire.citytocitytravelandroidapp.models.User;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.itempire.citytocitytravelandroidapp.CommonFeaturesClass.getMyPostsOfferRequestsStatus;
 
@@ -62,13 +67,15 @@ public class AdapterMyOffersRequests extends RecyclerView.Adapter<AdapterMyOffer
 
         AvailOffer offer = list.get(position);
 
-        holder.text_offers_data.setText(
-                offer.getMessage() + "\n" +
-                        offer.getNumberOfSeats() + "\n" +
-                        CommonFeaturesClass.getMyPostsOfferRequestsStatus(offer.getOfferStatus())
-        );
+        holder.text_offer_request_status.setText(CommonFeaturesClass.getMyPostsOfferRequestsStatus(offer.getOfferStatus()));
+        holder.place_offers_date.setText(offer.getDate());
+        holder.place_offers_message.setText(offer.getMessage());
+        holder.place_offers_seats.setText(offer.getNumberOfSeats());
+        holder.place_offers_time.setText(offer.getTime());
 
-        if (offer.getOfferStatus().equals(Constant.POST_ACTIVE_STATUS)) {
+
+        holder.layout_accept_reject_request.setVisibility(View.GONE);
+        if (offer.getOfferStatus().equals(Constant.OFFER_PENDING_STATUS)) {
             holder.layout_accept_reject_request.setVisibility(View.VISIBLE);
         }
 
@@ -122,6 +129,8 @@ public class AdapterMyOffersRequests extends RecyclerView.Adapter<AdapterMyOffer
             }
         });
 
+        getRequestingUserDetails(holder, offer.getOfferRequestingUId());
+
     }
 
     @Override
@@ -132,20 +141,76 @@ public class AdapterMyOffersRequests extends RecyclerView.Adapter<AdapterMyOffer
     public class Holder extends RecyclerView.ViewHolder {
 
         CardView card_offers_list;
-        RelativeLayout layout_accept_reject_request;
-        TextView text_offers_data;
+        LinearLayout layout_accept_reject_request;
+        TextView text_offer_request_status, nameRequestingUser, messageRequestingUser, callRequestingUser,
+                place_offers_message, place_offers_seats, place_offers_time, place_offers_date;
         Button btn_accept_offer_request, btn_reject_offer_request;
+
+        CircleImageView profileImageRequestingUser;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
 
             card_offers_list = itemView.findViewById(R.id.card_offers_list);
             layout_accept_reject_request = itemView.findViewById(R.id.layout_accept_reject_request);
-            text_offers_data = itemView.findViewById(R.id.text_offers_data);
+
+            place_offers_date = itemView.findViewById(R.id.place_offers_date);
+            place_offers_time = itemView.findViewById(R.id.place_offers_time);
+            place_offers_seats = itemView.findViewById(R.id.place_offers_seats);
+            place_offers_message = itemView.findViewById(R.id.place_offers_message);
+
+            text_offer_request_status = itemView.findViewById(R.id.text_offer_request_status);
+
             btn_accept_offer_request = itemView.findViewById(R.id.btn_accept_offer_request);
             btn_reject_offer_request = itemView.findViewById(R.id.btn_reject_offer_request);
 
+            nameRequestingUser = itemView.findViewById(R.id.nameRequestingUser);
+            messageRequestingUser = itemView.findViewById(R.id.messageRequestingUser);
+            callRequestingUser = itemView.findViewById(R.id.callRequestingUser);
+            profileImageRequestingUser = itemView.findViewById(R.id.profileImageRequestingUser);
+
         }
+    }
+
+    private void getRequestingUserDetails(final Holder holder, String requestingUserId) {
+        MyFirebaseDatabaseClass.USERS_PROFILE_REFERENCE.child(requestingUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+                    try {
+
+                        final User user = dataSnapshot.getValue(User.class);
+                        if (user != null) {
+                            holder.nameRequestingUser.setText(user.getUserName());
+                            holder.messageRequestingUser.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    CommonFeaturesClass.setSend_sms_to_owner(context, user.getUserPhoneNumber());
+                                }
+                            });
+                            holder.callRequestingUser.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    CommonFeaturesClass.setCall_to_owner(context, user.getUserPhoneNumber());
+                                }
+                            });
+
+                            if (user.getUserImageUrl() != null && !user.getUserImageUrl().equals("") && !user.getUserImageUrl().equals("null"))
+                                Picasso.get().load(user.getUserImageUrl()).fit().into(holder.profileImageRequestingUser);
+
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void AcceptOrRejectOfferRequest(final Holder holder, final AvailOffer offer, final String status) {
@@ -184,8 +249,7 @@ public class AdapterMyOffersRequests extends RecyclerView.Adapter<AdapterMyOffer
                         }
                     });
 
-                    holder.btn_reject_offer_request.setVisibility(View.GONE);
-                    holder.btn_accept_offer_request.setEnabled(false);
+                    holder.layout_accept_reject_request.setVisibility(View.GONE);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

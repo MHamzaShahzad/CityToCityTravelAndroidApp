@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,376 +8,396 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="5dp">
+        android:layout_height="match_parent">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@id/layout_btn_avail_cancel_request"
+            android:layout_alignParentTop="true"
             android:fillViewport="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:id="@+id/layout_request_post_description"
-            android:layout_width="match_parent"
-            android:layout_height="150dp">
-
-            <ImageView
-                android:id="@+id/image_post_description"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:background="@drawable/style_edit_box"
-                android:src="@drawable/car" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="10dp"
-                android:layout_toRightOf="@id/image_post_description">
+                android:padding="5dp">
 
-                <TextView
-                    android:id="@+id/txt_request_post_disc_post_time"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/layout_request_post_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp">
+
+                    <ImageView
+                        android:id="@+id/image_post_description"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:background="@drawable/style_edit_box"
+                        android:src="@drawable/car" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toRightOf="@id/image_post_description">
+
+                        <TextView
+                            android:id="@+id/txt_request_post_desc_post_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/raleway_semi_bold"
+                            android:text="Post Time"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/place_request_post_desc_post_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/txt_request_post_desc_post_time"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="sans-serif-light"
+                            android:text="10:12:00"
+                            android:textColor="@color/colorText"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/txt_request_post_departure_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/place_request_post_desc_post_time"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/raleway_semi_bold"
+                            android:text="Departure Date"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/place_request_post_departure_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/txt_request_post_departure_date"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="sans-serif-light"
+                            android:text="08-07-2019"
+                            android:textColor="@color/colorText"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/txt_request_post_departure_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/place_request_post_departure_date"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/raleway_semi_bold"
+                            android:text="Departure Time"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/place_request_post_departure_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/txt_request_post_departure_time"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="sans-serif-light"
+                            android:text="09:07:20"
+                            android:textColor="@color/colorText"
+                            android:textSize="15sp" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_request_post_depart_city"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/layout_request_post_description"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_request_post_departure_city"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/raleway_semi_bold"
+                        android:text="Departure City"
+                        android:textColor="@color/colorText"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/place_request_post_departure_city"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/image_my_post_description"
+                        android:layout_alignParentRight="true"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/style_button_solid_circle"
+                        android:fontFamily="@font/ralewaylight"
+                        android:lines="1"
+                        android:text="Faisalabad"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_request_post_depart_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layout_request_post_depart_city"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_request_post_departure_location"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/raleway_semi_bold"
+                        android:text="Departure Location"
+                        android:textColor="@color/colorText"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/place_request_post_departure_location"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/style_button_solid_circle"
+                        android:fontFamily="@font/ralewaylight"
+                        android:maxLines="2"
+                        android:text="GTS"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorWhite"
+                        app:autoSizeMaxTextSize="17sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_request_post_Arrival_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layout_request_post_depart_location"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_request_post_arrival_city"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/raleway_semi_bold"
+                        android:text="Arrival City"
+                        android:textColor="@color/colorText"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/place_request_post_arrival_city"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/style_button_solid_circle"
+                        android:fontFamily="@font/ralewaylight"
+                        android:lines="1"
+                        android:text="Lahore"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="17sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_request_post_Arrival_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layout_request_post_Arrival_city"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_request_post_arrival_location"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/raleway_semi_bold"
+                        android:text="Arrival Location"
+                        android:textColor="@color/colorText"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/place_request_post_arrival_location"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/style_button_solid_circle"
+                        android:fontFamily="@font/ralewaylight"
+                        android:maxLines="2"
+                        android:text="Bus Station"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorWhite"
+                        app:autoSizeMaxTextSize="17sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_request_post_totalNoOfSeatsAvailable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layout_request_post_Arrival_location"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_request_post_totalNoOfSeatsAvailable"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.6"
+                        android:fontFamily="@font/raleway_semi_bold"
+                        android:text="Total Seats Available"
+                        android:textColor="@color/colorText"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/place_request_post_totalNoOfSeatsAvailable"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/style_button_solid_circle"
+                        android:fontFamily="sans-serif-light"
+                        android:text="10"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="17sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_request_post_maximumNoOfSeatsAvailable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layout_request_post_totalNoOfSeatsAvailable"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_request_post_maximumNoOfSeatsAvailable"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.6"
+                        android:fontFamily="@font/raleway_semi_bold"
+                        android:text="Maximum Seats Available"
+                        android:textColor="@color/colorText"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/place_request_post_maximumNoOfSeatsAvailable"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/style_button_solid_circle"
+                        android:fontFamily="sans-serif-light"
+                        android:text="04"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="17sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_request_post_minimumNoOfSeatsAvailable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layout_request_post_maximumNoOfSeatsAvailable"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_request_post_minimumNoOfSeatsAvailable"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.6"
+                        android:fontFamily="@font/raleway_semi_bold"
+                        android:text="Minimum Seats Available"
+                        android:textColor="@color/colorText"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/place_request_post_minimumNoOfSeatsAvailable"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/style_button_solid_circle"
+                        android:fontFamily="sans-serif-light"
+                        android:text="01"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="17sp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_view_on_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_below="@id/layout_request_post_minimumNoOfSeatsAvailable"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/style_button_solid"
                     android:fontFamily="@font/raleway_semi_bold"
-                    android:text="Post Time"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="15sp" />
+                    android:text="View On Map"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="17sp" />
 
-                <TextView
-                    android:id="@+id/place_request_post_disc_post_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_request_post_disc_post_time"
-                    android:layout_marginTop="2dp"
-                    android:fontFamily="sans-serif-light"
-                    android:text="10:12:00"
-                    android:textColor="@color/colorText"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/txt_request_post_departure_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/place_request_post_disc_post_time"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/raleway_semi_bold"
-                    android:text="Departure Date"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/place_request_post_departure_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_request_post_departure_date"
-                    android:layout_marginTop="2dp"
-                    android:fontFamily="sans-serif-light"
-                    android:text="08-07-2019"
-                    android:textColor="@color/colorText"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/txt_request_post_departure_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/place_request_post_departure_date"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/raleway_semi_bold"
-                    android:text="Departure Time"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/place_request_post_departure_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_request_post_departure_time"
-                    android:layout_marginTop="2dp"
-                    android:fontFamily="sans-serif-light"
-                    android:text="09:07:20"
-                    android:textColor="@color/colorText"
-                    android:textSize="15sp" />
             </RelativeLayout>
 
-        </RelativeLayout>
-        <LinearLayout
-            android:id="@+id/layout_request_post_depart_city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/layout_request_post_description"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txt_request_post_departure_city"
-                android:layout_width="0dp"
-                android:layout_gravity="center_vertical"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:fontFamily="@font/raleway_semi_bold"
-                android:text="Departure City"
-                android:textColor="@color/colorText"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/place_request_post_departure_city"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/image_my_post_description"
-                android:layout_alignParentRight="true"
-                android:layout_weight="0.5"
-                android:background="@drawable/style_button_solid_circle"
-                android:fontFamily="@font/ralewaylight"
-                android:text="Faisalabad"
-                android:lines="1"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textSize="17sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_request_post_depart_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/layout_request_post_depart_city"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txt_request_post_departure_location"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:layout_gravity="center_vertical"
-                android:fontFamily="@font/raleway_semi_bold"
-                android:text="Departure Location"
-                android:textColor="@color/colorText"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/place_request_post_departure_location"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_weight="0.5"
-                android:lines="1"
-                android:background="@drawable/style_button_solid_circle"
-                android:fontFamily="@font/ralewaylight"
-                android:text="GTS"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textSize="17sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/layout_request_post_Arrival_city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/layout_request_post_depart_location"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txt_request_post_arrival_city"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:layout_gravity="center_vertical"
-                android:fontFamily="@font/raleway_semi_bold"
-                android:text="Arrival City"
-                android:textColor="@color/colorText"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/place_request_post_arrival_city"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_weight="0.5"
-                android:background="@drawable/style_button_solid_circle"
-                android:fontFamily="@font/ralewaylight"
-                android:text="Lahore"
-                android:lines="1"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textSize="17sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/layout_request_post_Arrival_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/layout_request_post_Arrival_city"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txt_request_post_arrival_location"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:layout_gravity="center_vertical"
-                android:fontFamily="@font/raleway_semi_bold"
-                android:text="Arrival Location"
-                android:textColor="@color/colorText"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/place_request_post_arrival_location"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_weight="0.5"
-                android:lines="1"
-                android:background="@drawable/style_button_solid_circle"
-                android:fontFamily="@font/ralewaylight"
-                android:text="Bus Station"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textSize="17sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/layout_request_post_totalNoOfSeatsAvailable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/layout_request_post_Arrival_location"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txt_request_post_totalNoOfSeatsAvailable"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.6"
-                android:layout_gravity="center_vertical"
-                android:fontFamily="@font/raleway_semi_bold"
-                android:text="Total Seats Available"
-                android:textColor="@color/colorText"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/place_request_post_totalNoOfSeatsAvailable"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_weight="0.4"
-                android:background="@drawable/style_button_solid_circle"
-                android:fontFamily="sans-serif-light"
-                android:text="10"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textSize="17sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/layout_request_post_maximumNoOfSeatsAvailable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/layout_request_post_totalNoOfSeatsAvailable"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txt_request_post_maximumNoOfSeatsAvailable"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.6"
-                android:layout_gravity="center_vertical"
-                android:fontFamily="@font/raleway_semi_bold"
-                android:text="Maximum Seats Available"
-                android:textColor="@color/colorText"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/place_request_post_maximumNoOfSeatsAvailable"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_weight="0.4"
-                android:background="@drawable/style_button_solid_circle"
-                android:fontFamily="sans-serif-light"
-                android:text="04"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textSize="17sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/layout_request_post_minimumNoOfSeatsAvailable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/layout_request_post_maximumNoOfSeatsAvailable"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txt_request_post_minimumNoOfSeatsAvailable"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.6"
-                android:layout_gravity="center_vertical"
-                android:fontFamily="@font/raleway_semi_bold"
-                android:text="Minimum Seats Available"
-                android:textColor="@color/colorText"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/place_request_post_minimumNoOfSeatsAvailable"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_weight="0.4"
-                android:background="@drawable/style_button_solid_circle"
-                android:fontFamily="sans-serif-light"
-                android:text="01"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textSize="17sp" />
-        </LinearLayout>
-            </RelativeLayout>
         </ScrollView>
-
-        <TextView
-            android:id="@+id/detail_request_post_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:id="@+id/layout_btn_avail_cancel_request"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:background="@drawable/style_button_solid_layout">
+            android:background="@drawable/style_button_solid_layout"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btn_avail_offer"
                 android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="17sp"
-                android:textAllCaps="false"
-                android:layout_marginRight="2.5dp"
-                android:fontFamily="@font/raleway_semi_bold"
-                android:background="@drawable/style_button_lining"
                 android:layout_height="40dp"
-                android:text="Avail Offer" />
+                android:layout_marginRight="2.5dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/style_button_lining"
+                android:fontFamily="@font/raleway_semi_bold"
+                android:text="Avail Offer"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="17sp" />
 
             <Button
                 android:id="@+id/btn_cancel_offer"
                 android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="17sp"
-                android:layout_marginLeft="2.5dp"
-                android:textAllCaps="false"
-                android:fontFamily="@font/raleway_semi_bold"
-                android:background="@drawable/style_button_lining"
                 android:layout_height="40dp"
-                android:text="Cancel Offer" />
+                android:layout_marginLeft="2.5dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/style_button_lining"
+                android:fontFamily="@font/raleway_semi_bold"
+                android:text="Cancel Offer"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="17sp" />
+
         </LinearLayout>
 
     </RelativeLayout>

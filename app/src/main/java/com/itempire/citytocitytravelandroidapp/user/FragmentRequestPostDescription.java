@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,9 +39,7 @@ import com.itempire.citytocitytravelandroidapp.models.Post;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class FragmentRequestPostDescription extends Fragment {
 
     private static final String TAG = FragmentRequestPostDescription.class.getName();
@@ -49,9 +48,11 @@ public class FragmentRequestPostDescription extends Fragment {
     Context context;
 
     ImageView image_post_description;
-    TextView detail_post_description;
-    Button btn_avail_offer, btn_cancel_offer;
-    RelativeLayout layout_btn_avail_cancel_request;
+    Button btn_avail_offer, btn_cancel_offer, btn_view_on_map;
+    LinearLayout layout_btn_avail_cancel_request;
+    TextView place_request_post_desc_post_time, place_request_post_departure_date, place_request_post_departure_time, place_request_post_departure_city,
+            place_request_post_departure_location, place_request_post_arrival_city, place_request_post_arrival_location, place_request_post_totalNoOfSeatsAvailable,
+            place_request_post_maximumNoOfSeatsAvailable, place_request_post_minimumNoOfSeatsAvailable;
 
     private FragmentInteractionListenerInterface mListener;
 
@@ -70,12 +71,23 @@ public class FragmentRequestPostDescription extends Fragment {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_request_post_description, container, false);
 
-            layout_btn_avail_cancel_request = (RelativeLayout) view.findViewById(R.id.layout_btn_avail_cancel_request);
+            place_request_post_desc_post_time = (TextView) view.findViewById(R.id.place_request_post_desc_post_time);
+            place_request_post_departure_date = (TextView) view.findViewById(R.id.place_request_post_departure_date);
+            place_request_post_departure_time = (TextView) view.findViewById(R.id.place_request_post_departure_time);
+            place_request_post_departure_city = (TextView) view.findViewById(R.id.place_request_post_departure_city);
+            place_request_post_departure_location = (TextView) view.findViewById(R.id.place_request_post_departure_location);
+            place_request_post_arrival_city = (TextView) view.findViewById(R.id.place_request_post_arrival_city);
+            place_request_post_arrival_location = (TextView) view.findViewById(R.id.place_request_post_arrival_location);
+            place_request_post_totalNoOfSeatsAvailable = (TextView) view.findViewById(R.id.place_request_post_totalNoOfSeatsAvailable);
+            place_request_post_maximumNoOfSeatsAvailable = (TextView) view.findViewById(R.id.place_request_post_maximumNoOfSeatsAvailable);
+            place_request_post_minimumNoOfSeatsAvailable = (TextView) view.findViewById(R.id.place_request_post_minimumNoOfSeatsAvailable);
+
+
+            layout_btn_avail_cancel_request = (LinearLayout) view.findViewById(R.id.layout_btn_avail_cancel_request);
             image_post_description = (ImageView) view.findViewById(R.id.image_post_description);
-            detail_post_description = (TextView) view.findViewById(R.id.detail_post_description);
             btn_avail_offer = (Button) view.findViewById(R.id.btn_avail_offer);
             btn_cancel_offer = (Button) view.findViewById(R.id.btn_cancel_offer);
-
+            btn_view_on_map = (Button) view.findViewById(R.id.btn_view_on_map);
 
             loadData();
 
@@ -84,19 +96,39 @@ public class FragmentRequestPostDescription extends Fragment {
     }
 
     private void loadData() {
-        Post post = (Post) (getArguments() != null ? getArguments().getSerializable(Constant.POST_OBJECT_DESCRIPTION) : null);
+        final Post post = (Post) (getArguments() != null ? getArguments().getSerializable(Constant.POST_OBJECT_DESCRIPTION) : null);
         if (post != null) {
             CommonFeaturesClass.loadPostImage(image_post_description, post);
-            detail_post_description.setText(
-                    post.getOwnerVehicleId() + "\n" +
-                            post.getTotalNoOfSeatsAvailable() + "\n" +
-                            post.getArrivalLocation() + "\n" +
-                            post.getDepartureCity() + "\n" +
-                            post.getDepartureLocation() + "\n"
-            );
+
+            place_request_post_desc_post_time.setText(post.getPostTime());
+
+            place_request_post_departure_date.setText(post.getDepartureDate());
+            place_request_post_departure_time.setText(post.getDepartureTime());
+            place_request_post_departure_city.setText(post.getDepartureCity());
+            place_request_post_departure_location.setText(post.getDepartureLocation());
+
+            place_request_post_arrival_city.setText(post.getArrivalCity());
+            place_request_post_arrival_location.setText(post.getArrivalLocation());
+
+            place_request_post_totalNoOfSeatsAvailable.setText(post.getTotalNoOfSeatsAvailable());
+            place_request_post_maximumNoOfSeatsAvailable.setText(post.getMaximumNoOfSeatsAvailable());
+            place_request_post_minimumNoOfSeatsAvailable.setText(post.getMinimumNoOfSeatsAvailable());
+
 
             if (getArguments().getString(Constant.OFFER_OR_POST_STATUS) != null && !getArguments().getString(Constant.OFFER_OR_POST_STATUS).equals(Constant.OFFER_PENDING_STATUS))
                 layout_btn_avail_cancel_request.setVisibility(View.GONE);
+
+            btn_view_on_map.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentMapGetLocationForPost mapGetLocationForPost = new FragmentMapGetLocationForPost();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Constant.POST_OBJECT_DESCRIPTION, post);
+                    bundle.putBoolean(Constant.VIEW_ON_MAP, true);
+                    mapGetLocationForPost.setArguments(bundle);
+                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, mapGetLocationForPost).addToBackStack(null).commit();
+                }
+            });
 
             setBtn_avail_offer(post);
             setBtn_cancel_offer(post);

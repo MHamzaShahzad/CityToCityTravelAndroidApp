@@ -45,6 +45,9 @@ public class Constant {
     public static final String ARRIVAL_LOCATION_KEY = "getArrivalLocationForPost";
 
 
+    public static final String VIEW_ON_MAP = "viewOnMap";
+
+
     public static final String TITLE_HOME = "Home";
     public static final String TITLE_USERS_AND_ADMINS = "Users and Admins";
     public static final String TITLE_VEHICLES_LIST = "Vehicles List";

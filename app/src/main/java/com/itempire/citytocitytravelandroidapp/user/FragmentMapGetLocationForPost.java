@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -46,9 +49,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.itempire.citytocitytravelandroidapp.Constant;
 import com.itempire.citytocitytravelandroidapp.FragmentInteractionListenerInterface;
 import com.itempire.citytocitytravelandroidapp.R;
+import com.itempire.citytocitytravelandroidapp.models.Post;
 
 import java.util.List;
 import java.util.Locale;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FragmentMapGetLocationForPost extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener, View.OnClickListener {
@@ -58,6 +64,7 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
     View view;
     TextView text_location_address;
     ImageView btn_submit_location;
+    RelativeLayout locationAddressLayout;
 
     GoogleApiClient mLocationClient;
     LocationRequest mLocationRequest;
@@ -91,9 +98,14 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
 
             view = inflater.inflate(R.layout.fragment_map_get_location_for_post, container, false);
 
+            locationAddressLayout = (RelativeLayout) view.findViewById(R.id.locationAddressLayout);
             text_location_address = (TextView) view.findViewById(R.id.text_location_address);
             btn_submit_location = (ImageView) view.findViewById(R.id.btn_submit_location);
 
+
+            if (getArguments() != null && getArguments().getBoolean(Constant.VIEW_ON_MAP) && getArguments().getSerializable(Constant.POST_OBJECT_DESCRIPTION) != null) {
+                locationAddressLayout.setVisibility(View.INVISIBLE);
+            }
 
             initMap();
             initClickListeners();
@@ -106,6 +118,20 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         Log.e(TAG, "onMapReady: ");
         mMap = googleMap;
+
+        if (getArguments() != null && getArguments().getBoolean(Constant.VIEW_ON_MAP) && getArguments().getSerializable(Constant.POST_OBJECT_DESCRIPTION) != null) {
+            locationAddressLayout.setVisibility(View.INVISIBLE);
+            try {
+                Post post = (Post) getArguments().getSerializable(Constant.POST_OBJECT_DESCRIPTION);
+                if (post != null) {
+                    mMap.clear();
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(post.getDepartureLatitude()), Double.valueOf(post.getDepartureLongitude()))).title(post.getDepartureCity()).snippet(post.getDepartureLocation())).showInfoWindow();
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(post.getArrivalLatitude()), Double.valueOf(post.getArrivalLongitude()))).title(post.getArrivalCity()).snippet(post.getArrivalLocation())).showInfoWindow();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         setGoogleClientForMap();
 
     }
@@ -115,24 +141,23 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
         if (location == null) {
             Toast.makeText(context, "Could not get Location", Toast.LENGTH_SHORT).show();
         } else {
-            mMap.clear();
-            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
             markerOptions.title("Your current Location!");
-            mMap.addMarker(markerOptions);
+            //mMap.addMarker(markerOptions);
             float zoomLevel = 16.0f; //This goes up to 21
             if (shouldMoveToCurrentLocation) {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
                 shouldMoveToCurrentLocation = false;
+                text_location_address.setText(getCompleteAddressString(context, latLng.latitude, latLng.longitude));
             }
-            mMap.addCircle(new CircleOptions()
+            /*mMap.addCircle(new CircleOptions()
                     .center(latLng)
                     .radius(100)
                     .strokeColor(Color.BLUE)
                     .strokeWidth(1f)
-                    .fillColor(0x550000FF));
-            text_location_address.setText(getCompleteAddressString(context, latLng.latitude, latLng.longitude));
+                    .fillColor(0x550000FF));*/
         }
     }
 
@@ -186,7 +211,6 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
     }
 
 
-
     private void initClickListeners() {
         text_location_address.setOnClickListener(this);
         btn_submit_location.setOnClickListener(this);
@@ -221,23 +245,10 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
     }
 
     private void setSelect_location() {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
-            AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
-                    .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
-                    .setCountry("PAK")
-                    .build();
-            Intent intent =
-                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                            .setFilter(typeFilter)
-                            .build((Activity) context);
-            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-
-
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
+            startActivityForResult(builder.build((Activity) context), PLACE_AUTOCOMPLETE_REQUEST_CODE);
+        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
         }
     }
@@ -267,6 +278,13 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
         return strAdd;
     }
 
+    private void removeLocationUpdates() {
+        if (mLocationClient != null && mLocationClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mLocationClient, this);
+            mLocationClient.disconnect();
+        }
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -281,6 +299,7 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        removeLocationUpdates();
     }
 
     @Override
@@ -289,5 +308,34 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
         if (mListener != null)
             mListener.onFragmentInteraction(Constant.TITLE_SELECT_LOCATION);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+
+            if (resultCode == RESULT_OK) {
+
+                Place place = PlacePicker.getPlace(data, context);
+                if (place != null) {
+
+                    mMap.clear();
+
+                    if (place.getLatLng() != null) {
+
+                        Log.e(TAG, "onActivityResult: " + place.getLatLng());
+
+                        latLng = place.getLatLng();
+                        getCompleteAddressString(context, place.getLatLng().latitude, place.getLatLng().longitude);
+                        mMap.addMarker(new MarkerOptions().position(place.getLatLng()));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 16.0f));
+
+                    }
+                    text_location_address.setText(place.getName() + "-" + place.getAddress());
+                }
+
+            }
+        }
+    } // onActivityResult Ended...
 
 }

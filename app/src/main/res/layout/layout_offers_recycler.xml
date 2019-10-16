@@ -1,159 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_offers_list"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:layout_marginBottom="-2.5dp"
+    android:background="@drawable/layout_card_bg_design"
+    app:cardElevation="2dp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_offers_list"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="1dp">
+        android:padding="10dp">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/layout_offer_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/layout_offer_date"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_offers_date"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:fontFamily="@font/raleway_semi_bold"
+                android:text="Date"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/text_offers_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="0.5"
-                    android:fontFamily="@font/raleway_semi_bold"
-                    android:text="Date"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/place_offers_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/style_background_white"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="12-10-2019"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_offer_time"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/place_offers_date"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/layout_offer_date"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/style_background_white"
+                android:fontFamily="sans-serif-medium"
+                android:textAlignment="center"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/text_offers_time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="0.5"
-                    android:fontFamily="@font/raleway_semi_bold"
-                    android:text="Time"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+        <LinearLayout
+            android:id="@+id/layout_offer_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_offer_date"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/place_offers_time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/style_background_white"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="02:17:19"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_offer_seats"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_offers_time"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/layout_offer_time"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:fontFamily="@font/raleway_semi_bold"
+                android:text="Time"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:layout_marginStart="10dp" />
 
-                <TextView
-                    android:id="@+id/text_offers_seats"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="0.5"
-                    android:fontFamily="@font/raleway_semi_bold"
-                    android:text="No Of Seats"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/place_offers_seats"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/style_background_white"
-                    android:fontFamily="sans-serif"
-                    android:text="02"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/place_offers_time"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/style_background_white"
+                android:fontFamily="sans-serif-medium"
+                android:textAlignment="center"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+        </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/layout_offer_arrival_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_offer_time"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:fontFamily="@font/raleway_semi_bold"
-                        android:padding="10dp"
-                        android:text="Offers Date"
-                        android:textColor="@color/colorText"
-                        android:textSize="18sp" />
+            <TextView
+                android:id="@+id/text_offers_arrival_city"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:fontFamily="@font/raleway_semi_bold"
+                android:text="Arrival City"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:layout_marginStart="10dp" />
 
-                    <TextView
-                        android:id="@+id/text_offers_data"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:fontFamily="sans-serif-medium"
-                        android:padding="10dp"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorText"
-                        android:textSize="18sp" />
-                </LinearLayout>
-            </LinearLayout>
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/place_offers_arrival_city"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/style_background_white"
+                android:fontFamily="sans-serif"
+                android:textAlignment="center"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
 
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_offer_seats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_offer_arrival_city"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_offers_seats"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:fontFamily="@font/raleway_semi_bold"
+                android:text="No Of Seats"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/place_offers_seats"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/style_background_white"
+                android:fontFamily="sans-serif"
+                android:textAlignment="center"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_offer_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_offer_seats"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_offers_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:fontFamily="@font/raleway_semi_bold"
+                android:text="Message"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/place_offers_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/style_background_white"
+                android:fontFamily="sans-serif"
+                android:textAlignment="center"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
