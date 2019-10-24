@@ -44,7 +44,7 @@ public class AdapterVehiclesListAdmin extends RecyclerView.Adapter<AdapterVehicl
         Vehicle vehicle = list.get(position);
         if (vehicle.getVehicleImage() != null)
             try {
-                Picasso.get().load(vehicle.getVehicleImage()).placeholder(R.drawable.placeholder_photos).fit().into(holder.vehicleImage);
+                Picasso.get().load(vehicle.getVehicleImage()).placeholder(R.drawable.placeholder_photos).centerInside().fit().into(holder.vehicleImage);
             } catch (Exception e) {
                 e.printStackTrace();
             }

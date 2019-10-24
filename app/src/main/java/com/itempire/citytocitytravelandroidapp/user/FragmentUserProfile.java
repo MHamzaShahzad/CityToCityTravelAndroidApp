@@ -88,7 +88,7 @@ public class FragmentUserProfile extends Fragment {
                         if (user != null) {
                             if (user.getUserImageUrl() != null)
                                 try {
-                                    Picasso.get().load(user.getUserImageUrl()).placeholder(R.drawable.user_avatar).fit().into(userProfileImage);
+                                    Picasso.get().load(user.getUserImageUrl()).placeholder(R.drawable.user_avatar).centerInside().fit().into(userProfileImage);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

@@ -293,7 +293,7 @@ public class FragmentUpdateUserProfile extends Fragment {
                 if (oldUser != null) {
                     if (oldUser.getUserImageUrl() != null)
                         try {
-                            Picasso.get().load(oldUser.getUserImageUrl()).placeholder(R.drawable.user_avatar).fit().into(profileImage);
+                            Picasso.get().load(oldUser.getUserImageUrl()).placeholder(R.drawable.user_avatar).centerInside().fit().into(profileImage);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

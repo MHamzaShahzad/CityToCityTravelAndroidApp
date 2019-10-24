@@ -27,7 +27,7 @@ public class AdapterUsersAndAdmins extends RecyclerView.Adapter<AdapterUsersAndA
     Context context;
     List<User> list;
 
-    private static final String ACCOUNT_TYPE_USER_TEXT = "Make User";
+    private static final String ACCOUNT_TYPE_USER_TEXT = "Remove Admin";
     private static final String ACCOUNT_TYPE_ADMIN_TEXT = "Make Admin";
 
     public AdapterUsersAndAdmins(Context context, List<User> list) {
@@ -49,7 +49,7 @@ public class AdapterUsersAndAdmins extends RecyclerView.Adapter<AdapterUsersAndA
 
         if (user.getUserImageUrl() != null)
             try {
-                Picasso.get().load(user.getUserImageUrl()).placeholder(R.drawable.user_avatar).fit().into(holder.profileImage);
+                Picasso.get().load(user.getUserImageUrl()).placeholder(R.drawable.user_avatar).centerInside().fit().into(holder.profileImage);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -201,6 +201,8 @@ public class MainDrawerActivity extends AppCompatActivity
             MyFirebaseCurrentUserClass.SignOut(context);
         } else if (id == R.id.nav_share) {
 
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentContactUs()).addToBackStack(null).commit();
+
         } else if (id == R.id.nav_send) {
 
 
@@ -232,7 +234,7 @@ public class MainDrawerActivity extends AppCompatActivity
         if (user != null) {
             if (user.getUserImageUrl() != null)
                 try {
-                    Picasso.get().load(user.getUserImageUrl()).placeholder(R.drawable.user_avatar).fit().into(userNavHeaderImage);
+                    Picasso.get().load(user.getUserImageUrl()).placeholder(R.drawable.user_avatar).centerInside().fit().into(userNavHeaderImage);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

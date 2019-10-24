@@ -141,16 +141,17 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
         if (location == null) {
             Toast.makeText(context, "Could not get Location", Toast.LENGTH_SHORT).show();
         } else {
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            markerOptions = new MarkerOptions();
+            /*markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
             markerOptions.title("Your current Location!");
-            //mMap.addMarker(markerOptions);
+            mMap.addMarker(markerOptions);*/
             float zoomLevel = 16.0f; //This goes up to 21
             if (shouldMoveToCurrentLocation) {
+                latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
                 shouldMoveToCurrentLocation = false;
                 text_location_address.setText(getCompleteAddressString(context, latLng.latitude, latLng.longitude));
+
             }
             /*mMap.addCircle(new CircleOptions()
                     .center(latLng)

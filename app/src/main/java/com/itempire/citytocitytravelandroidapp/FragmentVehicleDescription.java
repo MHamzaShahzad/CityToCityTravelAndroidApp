@@ -91,7 +91,7 @@ public class FragmentVehicleDescription extends Fragment implements View.OnClick
 
                 if (vehicle.getVehicleImage() != null)
                     try {
-                        Picasso.get().load(vehicle.getVehicleImage()).placeholder(R.drawable.placeholder_photos).fit().into(vehicleImage);
+                        Picasso.get().load(vehicle.getVehicleImage()).placeholder(R.drawable.placeholder_photos).centerInside().fit().into(vehicleImage);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

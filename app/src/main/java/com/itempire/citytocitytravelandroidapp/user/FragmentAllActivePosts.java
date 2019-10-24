@@ -6,14 +6,17 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -31,7 +34,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentAllActivePosts extends Fragment {
+public class FragmentAllActivePosts extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     Context context;
     View view;
@@ -40,6 +43,7 @@ public class FragmentAllActivePosts extends Fragment {
     List<Post> postsList;
     AdapterAllPosts adapterAllPosts;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private FragmentInteractionListenerInterface mListener;
 
     public FragmentAllActivePosts() {
@@ -67,13 +71,42 @@ public class FragmentAllActivePosts extends Fragment {
             recycler_all_posts.setAdapter(adapterAllPosts);
 
             initValueEventListener();
-
+            initSwipeRefreshLayout();
 
         }
         return view;
     }
 
+    private void initSwipeRefreshLayout() {
+        // SwipeRefreshLayout
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+
+        /*
+         * Showing Swipe Refresh animation on activity create
+         * As animation won't start on onCreate, post runnable is used
+         */
+
+
+        mSwipeRefreshLayout.post(new Runnable() {
+
+            @Override
+            public void run() {
+
+                startRefreshing();
+
+                // Fetching data from server
+                initValueEventListener();
+            }
+        });
+    }
+
     private void initValueEventListener() {
+        removeValueEventListener();
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -93,15 +126,26 @@ public class FragmentAllActivePosts extends Fragment {
                 }
                 adapterAllPosts.notifyDataSetChanged();
 
+                stopRefreshing();
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                stopRefreshing();
             }
         };
         MyFirebaseDatabaseClass.POSTS_REFERENCE.addValueEventListener(valueEventListener);
+    }
 
+    private void startRefreshing(){
+        if (mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(true);
+    }
+
+    private void stopRefreshing(){
+        if (mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -138,4 +182,10 @@ public class FragmentAllActivePosts extends Fragment {
             mListener.onFragmentInteraction(Constant.TITLE_HOME);
     }
 
+    @Override
+    public void onRefresh() {
+
+        initValueEventListener();
+
+    }
 }

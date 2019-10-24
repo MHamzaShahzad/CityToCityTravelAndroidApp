@@ -43,6 +43,7 @@ import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseStorageClas
 import com.itempire.citytocitytravelandroidapp.models.Post;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -179,6 +180,20 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
         if (create_posts_dept_date.length() == 0) {
             create_posts_dept_date.setError("Field is required!");
             result = false;
+        }
+
+        if (create_posts_dept_date.length() > 0 ){
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+            Date strDate = null;
+            try {
+                strDate = sdf.parse(create_posts_dept_date.getText().toString());
+                if (new Date().after(strDate)) {
+                    create_posts_dept_date.setError("Invalid Date : You can add your post one day before your trip!");
+                    result = false;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         if (create_posts_dept_time.length() == 0) {
@@ -371,7 +386,7 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
     }
 
     private void updateLabelFrom() {
-        String myFormat = "yyyy-MM-dd"; //In which you need put here
+        String myFormat = "dd/MM/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         create_posts_dept_date.setText(sdf.format(myCalendar.getTime()));
         create_posts_dept_date.requestFocus();
@@ -380,7 +395,7 @@ public class FragmentCreatePost extends Fragment implements View.OnClickListener
     }
 
     private void updateLabelTo() {
-        String myFormat = "yyyy-MM-dd"; //In which you need put here
+        String myFormat = "dd/MM/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         create_posts_arrival_date.setText(sdf.format(myCalendar.getTime()));
         create_posts_arrival_date.requestFocus();

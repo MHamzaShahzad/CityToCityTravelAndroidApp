@@ -61,5 +61,6 @@ public class Constant {
     public static final String TITLE_SELECT_LOCATION = "Select Location";
     public static final String TITLE_POST_DESCRIPTION = "Description";
     public static final String TITLE_REQUEST_POST_DESCRIPTION = "Request Description";
+    public static final String TITLE_CONTACT_US = "Contact Us";
 
 }

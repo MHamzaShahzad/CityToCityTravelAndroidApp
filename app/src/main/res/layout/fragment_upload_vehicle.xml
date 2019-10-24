@@ -5,75 +5,104 @@
     android:layout_height="match_parent"
     tools:context=".user.FragmentUploadVehicle">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/txt_vehicle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorWhite"
-            android:textSize="17sp"
-            android:text="Upload Your Vehicle"
-            android:fontFamily="@font/raleway_semi_bold"
-            android:background="@drawable/circle_button_style"
-            android:layout_margin="20dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txt_vehicle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@drawable/circle_button_style"
+                android:fontFamily="@font/raleway_semi_bold"
+                android:text="Upload Your Vehicle"
+                android:textColor="@color/colorWhite"
+                android:textSize="17sp" />
 
 
             <LinearLayout
                 android:id="@+id/layout_upload_vehicle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_vehicle"
                 android:orientation="vertical"
-                android:padding="10dp"
-                android:layout_below="@+id/txt_vehicle">
+                android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/vehicle_image"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/style_edit_box"
                     android:layout_margin="10dp"
+                    android:background="@drawable/style_edit_box"
                     android:src="@drawable/car" />
 
                 <EditText
                     android:id="@+id/vehicle_model"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/style_edit_box"
-                    android:textSize="15sp"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/colorText"
+                    android:background="@drawable/style_edit_box"
                     android:fontFamily="sans-serif-light"
                     android:hint="Vehicle Model"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:textColor="@color/colorText"
+                    android:textSize="15sp" />
 
-                <EditText
-                    android:id="@+id/vehicle_number"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Vehicle Number"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/style_edit_box"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorText"
-                    android:fontFamily="sans-serif-light"
-                    android:inputType="number" />
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/vehicle_alphabet"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/style_edit_box"
+                        android:fontFamily="sans-serif-light"
+                        android:hint="ABC"
+                        android:inputType="text"
+                        android:maxLength="3"
+                        android:textColor="@color/colorText"
+                        android:layout_marginRight="5dp"
+                        android:textSize="15sp"
+                        android:layout_marginEnd="5dp" />
+
+                    <EditText
+                        android:id="@+id/vehicle_digits"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:maxLength="4"
+                        android:background="@drawable/style_edit_box"
+                        android:fontFamily="sans-serif-light"
+                        android:hint="Vehicle Number"
+                        android:inputType="number"
+                        android:textColor="@color/colorText"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
             </LinearLayout>
 
 
-        <ImageView
-            android:id="@+id/upload_vehicle"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/layout_upload_vehicle"
-            android:layout_margin="20dp"
-            android:background="@drawable/circle_button_style"
-            android:src="@drawable/ic_arrow_forward_black" />
+            <ImageView
+                android:id="@+id/upload_vehicle"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_upload_vehicle"
+                android:layout_alignParentRight="true"
+                android:layout_margin="20dp"
+                android:background="@drawable/circle_button_style"
+                android:src="@drawable/ic_arrow_forward_black" />
 
-    </RelativeLayout>
-
+        </RelativeLayout>
+    </ScrollView>
 </FrameLayout>

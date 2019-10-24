@@ -66,7 +66,7 @@ public class CommonFeaturesClass {
                         Vehicle vehicle = dataSnapshot.getValue(Vehicle.class);
                         if (vehicle != null)
                             if (vehicle.getVehicleImage() != null)
-                                Picasso.get().load(vehicle.getVehicleImage()).into(imageView);
+                                Picasso.get().load(vehicle.getVehicleImage()).centerInside().fit().into(imageView);
 
                     } catch (Exception e) {
                         e.printStackTrace();

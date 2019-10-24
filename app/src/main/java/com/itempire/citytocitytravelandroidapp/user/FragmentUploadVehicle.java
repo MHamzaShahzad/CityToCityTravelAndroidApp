@@ -52,7 +52,7 @@ public class FragmentUploadVehicle extends Fragment implements View.OnClickListe
     View view;
 
     ImageView vehicle_image, upload_vehicle;
-    EditText vehicle_model, vehicle_number;
+    EditText vehicle_model, vehicle_alphabet, vehicle_digits;
 
     private static final int GALLERY_REQUEST_CODE = 1;
     private Bitmap imageBitmap;
@@ -108,7 +108,8 @@ public class FragmentUploadVehicle extends Fragment implements View.OnClickListe
         vehicle_image = view.findViewById(R.id.vehicle_image);
         upload_vehicle = view.findViewById(R.id.upload_vehicle);
         vehicle_model = view.findViewById(R.id.vehicle_model);
-        vehicle_number = view.findViewById(R.id.vehicle_number);
+        vehicle_alphabet = view.findViewById(R.id.vehicle_alphabet);
+        vehicle_digits = view.findViewById(R.id.vehicle_digits);
     }
 
     private void initClickListeners() {
@@ -129,15 +130,30 @@ public class FragmentUploadVehicle extends Fragment implements View.OnClickListe
             vehicle_model.setError("Field is required!");
             result = false;
         }
-        if (vehicle_number.length() == 0) {
-            vehicle_number.setError("Field is required!");
+        if (vehicle_alphabet.length() == 0) {
+            vehicle_alphabet.setError("Field is required!");
+            result = false;
+        }
+
+        if (vehicle_digits.length() == 0) {
+            vehicle_digits.setError("Field is required!");
+            result = false;
+        }
+
+        if (vehicle_alphabet.length() > 0 && vehicle_alphabet.length() > 3) {
+            vehicle_alphabet.setError("Invalid data!");
+            result = false;
+        }
+
+        if (vehicle_digits.length() > 0 && vehicle_digits.length() > 4) {
+            vehicle_digits.setError("Invalid data");
             result = false;
         }
 
         return result;
     }
 
-    private void getDefaultUserData(){
+    private void getDefaultUserData() {
 
     }
 
@@ -163,7 +179,7 @@ public class FragmentUploadVehicle extends Fragment implements View.OnClickListe
                                         MyFirebaseCurrentUserClass.mUser.getUid(),
                                         uri.toString(),
                                         vehicle_model.getText().toString(),
-                                        vehicle_number.getText().toString(),
+                                        vehicle_alphabet.getText().toString() + "-" + vehicle_digits.getText().toString(),
                                         Constant.VEHICLE_STATUS_INACTIVE
                                 )).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
