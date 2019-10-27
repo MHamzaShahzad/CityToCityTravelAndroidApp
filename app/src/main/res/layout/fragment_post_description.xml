@@ -15,8 +15,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_above="@id/layout_call_sms_vehicle"
+            android:layout_alignParentTop="true"
             android:fillViewport="true">
 
             <RelativeLayout
@@ -212,6 +212,7 @@
                         android:textAlignment="center"
                         android:textColor="@color/colorWhite"
                         android:textSize="17sp" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -350,6 +351,7 @@
                         android:textAlignment="center"
                         android:textColor="@color/colorWhite"
                         android:textSize="17sp" />
+
                 </LinearLayout>
 
                 <Button
@@ -365,6 +367,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
                     android:textSize="17sp" />
+
                 <Button
                     android:id="@+id/btn_avail_offer"
                     android:layout_width="match_parent"

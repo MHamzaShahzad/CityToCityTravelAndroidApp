@@ -7,8 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import com.itempire.citytocitytravelandroidapp.BackgroundTasksJobService;
-import com.itempire.citytocitytravelandroidapp.BackgroundTasksService;
+import com.itempire.citytocitytravelandroidapp.services.BackgroundTasksJobService;
+import com.itempire.citytocitytravelandroidapp.services.BackgroundTasksService;
 
 import static android.content.Context.JOB_SCHEDULER_SERVICE;
 

@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
+import com.itempire.citytocitytravelandroidapp.controllers.SendPushNotificationFirebase;
 import com.itempire.citytocitytravelandroidapp.models.AvailOffer;
 import com.itempire.citytocitytravelandroidapp.models.Post;
 import com.itempire.citytocitytravelandroidapp.models.User;
@@ -214,13 +215,17 @@ public class FragmentVehicleDescription extends Fragment implements View.OnClick
 
     }
 
-    private void changeVehicleStatus(String hostelStatus) {
+    private void changeVehicleStatus(final String vehicleStatus) {
 
-        MyFirebaseDatabaseClass.VEHICLES_REFERENCE.child(vehicle.getVehicleOwnerId()).child("vehicleStatus").setValue(hostelStatus).addOnSuccessListener(new OnSuccessListener<Void>() {
+        MyFirebaseDatabaseClass.VEHICLES_REFERENCE.child(vehicle.getVehicleOwnerId()).child("vehicleStatus").setValue(vehicleStatus).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(context, "Status Changed", Toast.LENGTH_SHORT).show();
                 ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
+                Log.e(TAG, "onSuccess: "+  vehicle.getVehicleOwnerId());
+                SendPushNotificationFirebase.buildAndSendNotification(context,
+                        vehicle.getVehicleOwnerId(),
+                        "Your Vehicle have been " + ( ( vehicleStatus.equals(Constant.VEHICLE_STATUS_ACTIVE) ? "Activated": "In-Activated") + " by Admin"), "");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -323,7 +328,7 @@ public class FragmentVehicleDescription extends Fragment implements View.OnClick
         for (DataSnapshot snapshot : snapshots) {
             try {
                 Post post = snapshot.getValue(Post.class);
-                if (post != null && post.getOwnerVehicleId().equals(MyFirebaseCurrentUserClass.mUser.getUid()) && post.getPostStatus().equals(Constant.POST_ACTIVE_STATUS)) {
+                if (post != null && post.getOwnerVehicleId().equals(vehicle.getVehicleOwnerId()) && post.getPostStatus().equals(Constant.POST_ACTIVE_STATUS)) {
                     myActivePosts.add(post);
                 }
             } catch (Exception e) {

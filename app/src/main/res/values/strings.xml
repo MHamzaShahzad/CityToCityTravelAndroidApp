@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CityToCityTravelAndroidApp</string>
+    <string name="app_name">CTC Traveling</string>
     <string name="welcome_to_our_app">Welcome to our app</string>
     <string name="loading">Loading…</string>
     <string name="enter_your_phone_number">Enter your phone number…</string>

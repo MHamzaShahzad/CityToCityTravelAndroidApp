@@ -3,6 +3,8 @@ package com.itempire.citytocitytravelandroidapp;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -16,9 +18,12 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.itempire.citytocitytravelandroidapp.admin.FragmentAllVehicles;
 import com.itempire.citytocitytravelandroidapp.admin.FragmentUsersAndAdmins;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
@@ -43,6 +48,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FragmentInteractionListenerInterface {
@@ -89,6 +95,22 @@ public class MainDrawerActivity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null)
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/" + user.getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful())
+                    Log.d(TAG, "Topic subscribed!");
+                else
+                    Log.e(TAG,"Can't subscribe to topic");
+            }
+        });
+    }
 
     @Override
     public void onBackPressed() {

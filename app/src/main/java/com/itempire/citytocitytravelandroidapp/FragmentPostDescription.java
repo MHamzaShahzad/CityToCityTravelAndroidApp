@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseCurrentUserClass;
 import com.itempire.citytocitytravelandroidapp.controllers.MyFirebaseDatabaseClass;
+import com.itempire.citytocitytravelandroidapp.controllers.SendPushNotificationFirebase;
 import com.itempire.citytocitytravelandroidapp.models.AvailOffer;
 import com.itempire.citytocitytravelandroidapp.models.Post;
 import com.itempire.citytocitytravelandroidapp.models.User;
@@ -211,6 +212,7 @@ public class FragmentPostDescription extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(context, "Offer request has been sent successfully", Toast.LENGTH_LONG).show();
+                        SendPushNotificationFirebase.buildAndSendNotification(context,post.getOwnerVehicleId(),"Offer Request","A user is requesting "+ no_of_seats.getText().toString() + " and saying, " + message.getText().toString());
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

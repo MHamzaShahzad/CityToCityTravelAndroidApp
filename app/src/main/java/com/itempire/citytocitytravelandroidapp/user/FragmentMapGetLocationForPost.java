@@ -211,7 +211,6 @@ public class FragmentMapGetLocationForPost extends Fragment implements OnMapRead
         }
     }
 
-
     private void initClickListeners() {
         text_location_address.setOnClickListener(this);
         btn_submit_location.setOnClickListener(this);

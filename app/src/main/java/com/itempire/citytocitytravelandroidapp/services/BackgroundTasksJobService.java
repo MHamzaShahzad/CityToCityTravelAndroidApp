@@ -1,4 +1,4 @@
-package com.itempire.citytocitytravelandroidapp;
+package com.itempire.citytocitytravelandroidapp.services;
 
 import android.app.job.JobParameters;
 import android.app.job.JobService;
