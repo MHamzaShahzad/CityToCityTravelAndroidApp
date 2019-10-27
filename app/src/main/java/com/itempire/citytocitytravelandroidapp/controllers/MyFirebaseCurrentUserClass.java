@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.itempire.citytocitytravelandroidapp.MainActivity;
 import com.itempire.citytocitytravelandroidapp.MainDrawerActivity;
 import com.itempire.citytocitytravelandroidapp.models.User;
@@ -47,6 +48,16 @@ public class MyFirebaseCurrentUserClass {
 
                         MainDrawerActivity.removeUserValueEventListener();
                         MyServicesControllerClass.stopCustomBackgroundService(context);
+                        if (mUser != null)
+                            FirebaseMessaging.getInstance().subscribeToTopic("/topics/" + mUser.getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful())
+                                        Log.d(TAG, "Topic subscribed!");
+                                    else
+                                        Log.e(TAG, "Can't subscribe to topic");
+                                }
+                            });
                         ((Activity) context).startActivity(new Intent((Activity) context, MainActivity.class));
                         ((Activity) context).finish();
 
@@ -98,6 +109,5 @@ public class MyFirebaseCurrentUserClass {
             MyFirebaseDatabaseClass.USERS_PROFILE_REFERENCE.child(MyFirebaseCurrentUserClass.mUser.getUid()).removeEventListener(userValueEventListener);
         MyPrefLocalStorage.clearPreferences(context);
     }
-
 
 }
