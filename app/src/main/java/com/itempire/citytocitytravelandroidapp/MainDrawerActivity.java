@@ -1,6 +1,8 @@
 package com.itempire.citytocitytravelandroidapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -101,15 +103,15 @@ public class MainDrawerActivity extends AppCompatActivity
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null)
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/" + user.getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful())
-                    Log.d(TAG, "Topic subscribed!");
-                else
-                    Log.e(TAG,"Can't subscribe to topic");
-            }
-        });
+            FirebaseMessaging.getInstance().subscribeToTopic("/topics/" + user.getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful())
+                        Log.d(TAG, "Topic subscribed!");
+                    else
+                        Log.e(TAG, "Can't subscribe to topic");
+                }
+            });
     }
 
     @Override
@@ -118,7 +120,10 @@ public class MainDrawerActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                super.onBackPressed();
+            else
+                alertDialogOnBackPress();
         }
     }
 
@@ -220,13 +225,12 @@ public class MainDrawerActivity extends AppCompatActivity
             checkIfVehicleAlreadyUploaded();
 
         } else if (id == R.id.nav_logout) {
+
             MyFirebaseCurrentUserClass.SignOut(context);
-        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_contact_us) {
 
             getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new FragmentContactUs()).addToBackStack(null).commit();
-
-        } else if (id == R.id.nav_send) {
-
 
         }
 
@@ -342,6 +346,22 @@ public class MainDrawerActivity extends AppCompatActivity
     public void onFragmentInteraction(String title) {
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(title);
+    }
+
+    private void alertDialogOnBackPress() {
+        new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_exit_to_app_black_24dp)
+                .setTitle("Exit App")
+                .setMessage("Are you sure you want to quit ?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
 }
