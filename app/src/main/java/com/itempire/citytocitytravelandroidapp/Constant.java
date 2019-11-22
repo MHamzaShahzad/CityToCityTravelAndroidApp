@@ -63,4 +63,6 @@ public class Constant {
     public static final String TITLE_REQUEST_POST_DESCRIPTION = "Request Description";
     public static final String TITLE_CONTACT_US = "Contact Us";
 
+    public static final String STRING_COMPLETE_MY_POST_REF = "postStatus";
+    public static final String STRING_OFFER_STATUS_REF = "offerStatus";
 }

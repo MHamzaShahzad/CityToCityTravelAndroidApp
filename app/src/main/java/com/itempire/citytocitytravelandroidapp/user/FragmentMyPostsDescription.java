@@ -221,7 +221,7 @@ public class FragmentMyPostsDescription extends Fragment {
 
     private void completeMyPost(final Post post) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("postStatus", Constant.POST_COMPLETED_STATUS);
+        map.put(Constant.STRING_COMPLETE_MY_POST_REF, Constant.POST_COMPLETED_STATUS);
         MyFirebaseDatabaseClass.POSTS_REFERENCE.child(post.getPostId()).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -240,7 +240,7 @@ public class FragmentMyPostsDescription extends Fragment {
                         try {
                             AvailOffer offer = snapshot.getValue(AvailOffer.class);
                             if (offer != null && offer.getOfferStatus().equals(Constant.OFFER_PENDING_STATUS)) {
-                                snapshot.getRef().child("offerStatus").setValue(Constant.OFFER_EXPIRED_STATUS);
+                                snapshot.getRef().child(Constant.STRING_OFFER_STATUS_REF).setValue(Constant.OFFER_EXPIRED_STATUS);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

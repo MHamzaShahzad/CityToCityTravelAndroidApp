@@ -196,7 +196,12 @@ public class AdapterMyOffersRequests extends RecyclerView.Adapter<AdapterMyOffer
                             });
 
                             if (user.getUserImageUrl() != null && !user.getUserImageUrl().equals("") && !user.getUserImageUrl().equals("null"))
-                                Picasso.get().load(user.getUserImageUrl()).fit().into(holder.profileImageRequestingUser);
+                                Picasso.get()
+                                        .load(user.getUserImageUrl())
+                                        .error(R.drawable.placeholder_photos)
+                                        .placeholder(R.drawable.placeholder_photos)
+                                        .centerInside().fit()
+                                        .into(holder.profileImageRequestingUser);
 
                         }
 

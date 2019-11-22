@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Context context;
 
     private static final int RC_SIGN_IN = 1;
+    private ProgressDialog progressDialog;
+
     List<AuthUI.IdpConfig> providers;
 
     @Override
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         findViewById(R.id.btn_login_phone).setOnClickListener(this);
+        initProgressDialog();
 
     }
 
@@ -92,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showSignInOptions() {
-
+        showProgressDialog();
         // Create and launch sign-in intent
         startActivityForResult(
                 AuthUI.getInstance()
@@ -105,10 +109,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void initProgressDialog() {
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+    }
+
+    private void showProgressDialog() {
+        if (progressDialog != null && !progressDialog.isShowing())
+            progressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        hideProgressDialog();
         if (requestCode == RC_SIGN_IN) {
             Log.e(TAG, "onActivityResult: VALID_REQUEST_CODE");
             IdpResponse response = IdpResponse.fromResultIntent(data);
@@ -121,22 +142,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     MyFirebaseDatabaseClass.USERS_PROFILE_REFERENCE.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                             MyFirebaseCurrentUserClass.initFirebaseUser();
-                            if (dataSnapshot.getValue() == null) {
-
+                            if (dataSnapshot.getValue() == null)
                                 startSignUpActivity();
-
-
-                            }else {
-
-                                HashMap<String, Object> userTokensMap = new HashMap<>();
-                                userTokensMap.put("userId", user.getUid());
-                                userTokensMap.put("deviceFBToken", new MyPrefLocalStorage(context).getDeviceToken());
-                                MyFirebaseDatabaseClass.USERS_TOKEN_REFERENCE.child(user.getUid()).updateChildren(userTokensMap);
-
-                                Toast.makeText(context, "LoggedIn Successfully!",Toast.LENGTH_LONG).show();
+                            else
                                 startMainDrawer();
-                            }
+
                         }
 
                         @Override
@@ -144,8 +156,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         }
                     });
-
-
                 }
                 // ...
             } else {
